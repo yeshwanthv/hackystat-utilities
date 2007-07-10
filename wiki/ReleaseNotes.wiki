@@ -1,14 +1,13 @@
-#summary One-sentence summary of this page.
+#summary Provides a summary of changes for each release milestone.
 #labels Featured
 
-= Introduction =
+=== July 10, 2007 Milestone Release ===
 
-Add your content here.
+This release provides two utility packages: hackystatlogger.lib.jar and stacktrace.lib.jar.
 
+Package:
+  * [http://hackystat-utilities.googlecode.com/files/hackystat-utilities-8.0.710.zip hackystat-utilities-8.0.710]
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Summary of changes:
+ * hackystatlogger.lib.jar provides a wrapper around the Java logging package with formatters that produce timestamps in the standard hackystat fashion.
+ * stacktrace.lib.jar provides a convenience class for converting a stacktrace to a string.
