@@ -1,0 +1,28 @@
+#summary Description and instructions for downloading, and using a UriCache library in your code.
+
+= 1.0 Introduction =
+
+This User Guide provides instructions on how to download, install, configure, and use the Hackystat !UriCache library. It also provides simple examples of library usage.
+
+The !UriCache system is a wrapper around [http://jakarta.apache.org/jcs/ Apache JCS] system, which provides a backbone of the caching mechanism (and brings some overhead with libraries).
+
+= 2.0 Downloading =
+
+You will normally want to download the latest distribution of the !UriCache with others !HackyStat utilities from the [http://hackystat-utilities.googlecode.com/downloads/list Downloads] page. The file will be named hackystat-utilities-{version}.zip. Inside the archive you will find a uricache.lib.jar file which is the !UriCache library.
+
+It is also possible to download the sources from the [http://code.google.com/p/hackystat-utilities/source Hackystat-Utilities SVN repository], but in that case you will need to build the library from sources. The distribution package comes with both sources and a pre-built libraries.
+
+= 3.0 Prerequisites =
+
+Before using UriCache library you will need to install next packages and configure environment variables along with CLASSPATH variables within eclipse as follows:
+
+|| *Package* || *Version* || *Environment/Classpath Variable* || *Sample Env Value* ||
+|| [http://commons.apache.org/lang/ Apache Commons Lang component] || 2.3 || APACHE_COMMONS_LANG_HOME || c:\tools\commons-lang-2.3 ||
+|| [http://commons.apache.org/logging/ Apache Commons Logging] || 1.1 ||APACHE_COMMONS_LOGGING_HOME || c:\tools\commons-logging-1.1 ||
+|| [http://jakarta.apache.org/jcs/ Java Caching System] || 1.3 || APACHE_JCS_HOME || c:\tools\apache-jcs-1.3 ||
+
+= 4.0 Usage =
+
+
+
+
