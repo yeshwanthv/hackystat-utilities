@@ -14,7 +14,7 @@ It is also possible to download the sources from the [http://code.google.com/p/h
 
 = 3.0 Prerequisites =
 
-Before using UriCache library you will need to install next packages and configure environment variables along with CLASSPATH variables within eclipse as follows:
+Before using UriCache library you will need to install next packages and configure environment variables along with CLASSPATH variables within the Eclipse as follows:
 
 || *Package* || *Version* || *Environment/Classpath Variable* || *Sample Env Value* ||
 || [http://commons.apache.org/lang/ Apache Commons Lang component] || 2.3 || APACHE_COMMONS_LANG_HOME || c:\tools\commons-lang-2.3 ||
@@ -22,7 +22,6 @@ Before using UriCache library you will need to install next packages and configu
 || [http://jakarta.apache.org/jcs/ Java Caching System] || 1.3 || APACHE_JCS_HOME || c:\tools\apache-jcs-1.3 ||
 
 = 4.0 Usage =
-
 
 
 
