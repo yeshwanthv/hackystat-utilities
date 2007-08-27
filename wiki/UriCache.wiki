@@ -41,7 +41,7 @@ To cache an object you may use two methods:
 
 == 4.3. Checking whether or not object exists within the cache ==
 
-To check an object presence within the cache `lookup(String urlString)` method used. It returns object if it is found within the cache or null if if not.
+To check an object presence within the cache `lookup(String urlString)` method used. It returns object if it was found within the cache or null if it wasn't.
 
 == 4.4. Removing object from cache == 
 
@@ -49,10 +49,5 @@ To remove an object from cache `remove(String urlString)` method is used.
 
 == 4.5. Automatically purging the cache ==
 
-To specify default time value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used.
-
-
-
-
-
+To specify default time value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used. UriCache will free memory used by the Objects automatically if this memory wasn't read within the time interval specified.
 
