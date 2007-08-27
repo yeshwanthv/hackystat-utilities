@@ -29,7 +29,7 @@ In order to use !UriCache library in your code you need to put uricache.lib.jar 
 
 == 4.1. Getting cache instance ==
 
-Use UriCacheFactory to get new cache instance: `myURICache = UriCacheFactory.getURICacheInstance();`.
+Use !UriCacheFactory to get new cache instance: `myURICache = UriCacheFactory.getURICacheInstance();`.
 
 == 4.2. Caching the object ==
 
@@ -50,7 +50,6 @@ To remove an object from cache `remove(String urlString)` method is used.
 == 4.5. Automatically purging the cache ==
 
 To specify default time value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used.
-
 
 
 
