@@ -25,6 +25,34 @@ While !UriCache as JCS relies on usage of util.concurrent Release 1.3.4. by [htt
 
 = 4.0 Usage =
 
+In order to use !UriCache library in your code you need to put uricache.lib.jar within your build and run CLASSPATH. Upon instantiation of !UriCache object it will initialize memory and disk caches for it's own use. The memory cache volume limited to 500 objects, once this amount consumed the !UriCache library will use !DiskCache for backing memory cache.  There is a list of methods you might want to use:
+
+== 4.1. Getting cache instance ==
+
+Use UriCacheFactory to get new cache instance: `myURICache = UriCacheFactory.getURICacheInstance();`.
+
+== 4.2. Caching the object ==
+
+To cache an object you may use two methods:
+
+  `cache(String urlString, Object obj)` - this methods caches the object using as a key string provided as the first parameter.
+
+  `cache(String urlString, Object obj, XMLGregorianCalendar expirationTime)` - this method caches object and will purge the memory used by it after the expiration time interval specified as the third parameter.
+
+== 4.3. Checking whether or not object exists within the cache ==
+
+To check an object presence within the cache `lookup(String urlString)` method used. It returns object if it is found within the cache or null if if not.
+
+== 4.4. Removing object from cache == 
+
+To remove an object from cache `remove(String urlString)` method is used.
+
+== 4.5. Automatically purging the cache ==
+
+To specify default time value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used.
+
+
+
 
 
 
