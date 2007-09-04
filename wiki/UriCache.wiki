@@ -6,7 +6,7 @@ This User Guide provides instructions on how to download, install, configure, an
 
 The !UriCache system is a wrapper around [http://jakarta.apache.org/jcs/ Apache JCS] system which provides a backbone of the caching mechanism (and brings some overhead with libraries).
 
-!UriCache is the memory cache which works according Least Recently Used (LRU) algorithm which discards the least recently used items first. The idea behind the implementing of this library is the communications optimization between Hackystat 8 components which described in the [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b Philip's post "RFC: Caching"].
+!UriCache is the memory cache which works according Least Recently Used (LRU) algorithm which discards the least recently used items first. The idea behind the implementing of this library is the communications optimization between Hackystat 8 components which described in the Philip's post [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
 
 The current !UriCache implementation assumes that cached items are not eternal, i.e. they can expire. By default items will expire in 24 hours after they are added to the cache, it is possible to change auto expiration time by specifying another value. Note, that it is possible to specify items expiration time by maximum memory idle time also, items will be actively removed from the cache if they are not used within the time frame specified.
 
@@ -61,7 +61,6 @@ You may use `clear()` method to purge the whole cache.
 == 4.5. Automatically purging the cache items by memory idle time ==
 
 To specify a time interval value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
-
 
 
 
