@@ -54,14 +54,13 @@ To check an item presence within the cache and retrieve it `lookup(String uriStr
 
 == 4.4. Removing object from cache == 
 
-To remove an object from cache `remove(String uriString)` method is used.
+To remove an item from cache `remove(String uriString)` method might be used.
 
 You may use `clear()` method to purge the whole cache.
 
 == 4.5. Automatically purging the cache items by memory idle time ==
 
 To specify a time interval value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
-
 
 
 
