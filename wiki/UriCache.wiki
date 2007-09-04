@@ -12,7 +12,7 @@ The current !UriCache implementation assumes that cached items are not eternal, 
 
 Also you can define the maximum life of an individual item by setting the expirationTimeStamp parameter when adding item in the cache. If an item has been in the cache for longer than the set timestamp value it will be removed from the cache. Note that this method overrides the high-level expiration settings. 
 
-Current implementation of the !UriCache use the background memory shrinker to delete elements when they are expired. 
+Current implementation of the !UriCache use the background memory shrinker which runs each 60 seconds to delete items which are expired. 
 
 = 2.0 Downloading =
 
@@ -61,7 +61,6 @@ You may use `clear()` method to purge the whole cache.
 == 4.5. Automatically purging the cache items by memory idle time ==
 
 To specify a time interval value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
-
 
 
 
