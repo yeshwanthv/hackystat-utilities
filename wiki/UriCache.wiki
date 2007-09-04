@@ -62,6 +62,7 @@ You may use `clear()` method to purge the whole cache.
 
 To specify a time interval value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
 
+You may want see [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCache.html UriCache JavaDocs] for additional information.
 
 
 
