@@ -7,13 +7,13 @@ This User Guide provides instructions on how to download, install, configure, an
 
 The !UriCache system is a wrapper around [http://jakarta.apache.org/jcs/ Apache JCS] system which provides a backbone of the caching mechanism (and brings some overhead with libraries).
 
-!UriCache is the memory cache which works according Least Recently Used (LRU) algorithm which discards the least recently used items first. The idea behind the implementing of this library is the communications optimization between Hackystat 8 components which described in the Philip's post [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
+!UriCache is the memory cache backed by the indexed disk cache which works according Least Recently Used (LRU) algorithm which discards (or purges onto disk storage if it has capacity to handle) the least recently used items first. The idea behind the implementing of this library is the communications optimization between Hackystat 8 components which described in the Philip's post [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
 
 The current !UriCache implementation assumes that cached items are not eternal, i.e. they can expire. By default items will expire in 24 hours after they are added to the cache, it is possible to change auto expiration time by specifying another value. Note, that it is possible to specify items expiration time by maximum memory idle time also, items will be actively removed from the cache if they are not used within the time frame specified.
 
 Also you can define the maximum life of an individual item by setting the expirationTimeStamp parameter when adding item in the cache. If an item has been in the cache for longer than the set timestamp value it will be removed from the cache. Note that this method overrides the high-level expiration settings. 
 
-Current implementation of the !UriCache use the background memory shrinker which runs each 60 seconds to delete items which are expired. 
+Current implementation of the !UriCache use the background memory shrinker which runs each 60 seconds to delete items which are expired. I know that shrinker has some issues and working on it.
 
 = 2.0 Downloading =
 
@@ -33,35 +33,83 @@ While !UriCache as JCS relies on usage of util.concurrent Release 1.3.4. by [htt
 
 = 4.0 Usage =
 
-In order to use !UriCache library in your code you need to put uricache.lib.jar within your build and run CLASSPATH. Upon instantiation of !UriCache object it will initialize memory cache for it's own use. The memory cache volume limited by default to 500 items and the auto expiration time is set to 24 hours.  There is a list of methods you might want to use:
+In order to use !UriCache library in your code you need to put uricache.lib.jar within your build and run CLASSPATH. 
 
-== 4.1. Getting cache instance ==
+== 4.1. Configuring !UriCacheProperties == 
+Before obtaining the !UriCache instance you need to configure cache properties first. Upon instantiation of !UriCacheProperties next parameters set to their default values:
+|| !UriCache property || Default property value || Method to set the custom value ||
+|| cacheRegionName || "UriCache" || setCacheRegionName(String cacheName) ||
+|| maxIdleTime || 86400 ms, i.e. 24 hours|| setMaxIdleTime(Long idleTime) ||
+|| maxMemoryCAcheCapacity || 5000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
+|| cacheStoragePath || current system TEMP folder || setCacheStoragePath(String storagePath) ||
+Basically the default !UriCacheProperties instance might be used for most of the cache instances you need.
 
-Use the default constructor to get !UriCache instance: `myURICache = new UriCache();`.
+== 4.2. Getting cache instance ==
 
-It is possible to configure the cache capacity and items default expiration time by using another constructor: `myURICache = new UriCache(CacheCapacity, maxLifeSeconds);`.
+Use the default constructors to get !UriCacheProperties and !UriCache instance:
+{{{
+   UriCacheProperties prop = new UriCacheProperties();
+   UriCache myURICache<String, String> = new UriCache<String, String>();
+}}}
 
-== 4.2. Caching an item ==
+If you are going to create multiple caches in your code don't forget to assign different names to each of those, for example:
+
+{{{
+    // create three properties first
+    UriCacheProperties stringCacheProp = new UriCacheProperties();
+    stringCacheProp.setCacheStoragePath("sandbox/cache");
+    stringCacheProp.setCacheRegionName("StringsCache");
+
+    UriCacheProperties intCacheProp = new UriCacheProperties();
+    intCacheProp.setCacheStoragePath("sandbox/cache");
+    intCacheProp.setCacheRegionName("IntegerCache");
+
+    UriCacheProperties doubleCacheProp = new UriCacheProperties();
+    doubleCacheProp.setCacheStoragePath("sandbox/cache");
+    doubleCacheProp.setCacheRegionName("DoubleCache");
+
+    try {
+      // create cache instances
+      UriCache<String, String> stringCache = new UriCache<String, String>(stringCacheProp);
+      UriCache<String, Integer> integerCache = new UriCache<String, Integer>(intCacheProp);
+      UriCache<String, Double> doubleCache = new UriCache<String, Double>(doubleCacheProp);
+    }
+    catch (UriCacheException e) {
+      fail("Unable to proceed with cache instantiation: "
+          + formatter.format(new LogRecord(Level.ALL, e.toString())));
+    }
+
+}}}
+
+== 4.3. Caching an item ==
 
 To cache an item you may use two methods:
 
-  `cache(String uriString, Object obj)` - this methods caches the item using as a key URI string provided as the first parameter.
+  `cache(K uriString, V obj)` - this methods caches the item using first parameter as the key.
 
-  `cache(String uriString, Object obj, XMLGregorianCalendar expirationTime)` - this method caches an item and specifies its expiration time.
+  `cache(K uriString, V obj, XMLGregorianCalendar expirationTime)` - this method caches an item and specifies its expiration time.
 
-== 4.3. Retrieving items from the cache ==
+== 4.4. Retrieving items from the cache ==
 
-To check an item presence within the cache and retrieve it `lookup(String uriString)` method used. It returns item if it was found within the cache or `null` if it wasn't.
+To check an item presence within the cache and retrieve it `lookup(K uriString)` method used. It returns item if it was found within the cache or `null` if it wasn't.
 
-== 4.4. Removing object from cache == 
+== 4.5. Removing object from cache == 
 
-To remove an item from cache `remove(String uriString)` method might be used.
+To remove an item from cache `remove(K uriString)` method might be used.
 
-You may use `clear()` method to purge the whole cache.
+You may use a `clear()` method to purge the whole cache.
 
-== 4.5. Automatically purging the cache items by memory idle time ==
+== 4.6. Automatically purging the cache items by memory idle time ==
 
 To specify a time interval value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
+
+== 4.7. Shutting down the cache ==
+
+Since I am still working on the persistence, the `shutdown()` does not works the way you may think, it's actually purges all memory items to the disk cache and closes the file access. Therefore you might find huge files left after testing. To handle this issue it's recommended to call two methods consequently to shut down cache:
+{{{
+    myUriCache.clear();     // removes all items from the cache
+    myUriCache.shutdown();  // closes the cache 
+}}}
 
 You may want see [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCache.html UriCache JavaDocs] for additional information.
 
@@ -175,3 +223,11 @@ For the key 10000 got value null
 
 
 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
