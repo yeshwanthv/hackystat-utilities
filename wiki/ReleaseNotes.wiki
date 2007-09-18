@@ -1,6 +1,19 @@
 #summary Provides a summary of changes for each release milestone.
 #labels Featured
 
+=== September 18, 2007 Milestone Release ===
+
+This release provides improved UriCache utility package:
+
+Summary of changes:
+ * UriCache got generics now: it must be created as UriCache<K, V>.
+ * UriCache is now a memory cache backed by the indexed disk cache.
+
+Known bugs:
+ * Persistence of the disk stored items doesn't work.
+ * Shrinker thread is slow and sometimes seems to doesn't work at all.
+ 
+
 === July 10, 2007 Milestone Release ===
 
 This release provides two utility packages: hackystatlogger.lib.jar and stacktrace.lib.jar.
@@ -11,3 +24,5 @@ Package:
 Summary of changes:
  * hackystatlogger.lib.jar provides a wrapper around the Java logging package with formatters that produce timestamps in the standard hackystat fashion.
  * stacktrace.lib.jar provides a convenience class for converting a stacktrace to a string.
+ 
+ 
