@@ -42,6 +42,7 @@ Before obtaining the !UriCache instance you need to configure cache properties f
 || maxIdleTime || 86400 ms, i.e. 24 hours|| setMaxIdleTime(Long idleTime) ||
 || maxMemoryCAcheCapacity || 5000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
 || cacheStoragePath || current system TEMP folder || setCacheStoragePath(String storagePath) ||
+|| loggerLevel || Level.OFF || setLoggerLevel(Level level) ||
 Basically the default !UriCacheProperties instance might be used for most of the cache instances you need.
 
 == 4.2. Getting cache instance ==
@@ -114,105 +115,7 @@ Since I am still working on the persistence, the `shutdown()` does not works the
 You may want see [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCache.html UriCache JavaDocs] for additional information.
 
 = 5.0 Code samples = 
-This section provides couple of code samples to help you understand the library usage.
-
-== 5.1. Default cache test ==
-In this code we will get an UriCache instance configured according to default settings and will test the cache functionality.
-{{{
-      // getting default UriCache instance
-      UriCache myURICache = new UriCache();
-
-      //
-      // testing caching 
-      //
-      for (int i = 0; i < 500; i++) {
-        myURICache.cache(String.valueOf(i), i);
-      }
-
-      for (int i = 0; i < 501; i++) {
-        Integer j = (Integer) myURICache.lookup(String.valueOf(i));
-        System.out.println("For the key " + i + " got value " + j);
-      }
-
-}}}
-
-Expected output for this code (beside the cache configuration INFO) is as follows:
-{{{
-For the key 0 got value 0
-For the key 1 got value 1
-
-...
-
-For the key 500 got value null
-}}}
-
-== 5.1. Auto expiration of cached items test ==
-In this code we will get an UriCache instance configured to auto expire cached items in 5 seconds along with the bigger cache capacity and will test auto expiration mechanism:
-{{{
-      Integer idleTimeSeconds = 5; 
-  
-      // getting UriCache instance
-      myURICache = new UriCache(10000, idleTimeSeconds);
-
-      // caching 10000 items
-      for (int i = 0; i < 10000; i++) {
-        myURICache.cache(String.valueOf(i), i);
-      }
-
-      // sleeping for two minutes
-      System.out.println("idle time seconds=" + idleTimeSeconds);
-      long sleepTime = 1000 * 120;
-      System.out.println("sleeping for " + sleepTime
-          + " millis to allow cache elements to be flagged as idle for too long");
-      Thread.sleep(sleepTime);
-
-      // checking cache content
-      for (int i = 0; i < 10001; i++) {
-        Integer j = (Integer) myURICache.lookup(String.valueOf(i));
-        System.out.println("For the key " + i + " got value " + j);
-      }
-
-}}}
-
-
-The expected output for this code will contain four sections:
- * the cache configuration info which looks like:
- {{{
-Sep 4, 2007 9:52:12 AM org.apache.jcs.engine.memory.lru.LRUMemoryCache initialize
-INFO: initialized LRUMemoryCache for UriCache
-Sep 4, 2007 9:52:12 AM org.apache.jcs.engine.control.CompositeCache <init>
-INFO: Constructed cache with name [UriCache] and cache attributes [ useLateral = false, useRemote = false, useDisk = false, maxObjs = 10000, maxSpoolPerRun = -1, diskUsagePattern = 0 ]
-Sep 4, 2007 9:52:12 AM org.apache.jcs.engine.control.CompositeCacheConfigurator parseRegions
-INFO: Parsed regions [UriCache]
-Sep 4, 2007 9:52:12 AM org.apache.jcs.engine.control.CompositeCacheConfigurator doConfigure
-INFO: Finished configuration in 0 ms.
- }}}
- * sleeping message
-{{{
-idle time seconds=5
-sleeping for 120000 millis to allow cache elements to be flagged as idle for too long
-}}}
- * whole bunch of shrinker info messages about expiring elements:
-{{{
-Sep 4, 2007 9:53:12 AM org.apache.jcs.engine.memory.shrinking.ShrinkerThread checkForRemoval
-INFO: Exceeded maxLifeSeconds: 3613
-Sep 4, 2007 9:53:12 AM org.apache.jcs.engine.memory.shrinking.ShrinkerThread checkForRemoval
-
-....
-
-INFO: Exceeded maxLifeSeconds: 3612
-Sep 4, 2007 9:53:12 AM org.apache.jcs.engine.memory.shrinking.ShrinkerThread checkForRemoval
-}}}
- * and finally we will not see any of the items in the cache:
-{{{
-For the key 0 got value null
-For the key 1 got value null
-
-...
-
-For the key 9999 got value null
-For the key 10000 got value null
-}}}
+You can get an idea about about coding looking at the [http://hackystat-utilities.googlecode.com/svn/trunk/src/org/hackystat/utilities/uricache/TestUriCache.java UriCache test].
 
 
 
@@ -223,6 +126,9 @@ For the key 10000 got value null
 
 
 
+
+ 
+ 
  
  
  
