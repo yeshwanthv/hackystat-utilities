@@ -108,7 +108,7 @@ To specify a time interval value for the automatic cache purging the `setMaxMemo
 
 == 4.7. Shutting down the cache ==
 
-Since I am still working on the persistence, the `shutdown()` does not works the way you may think, it's actually purges all memory items to the disk cache and closes the file access. Therefore you might find huge files left after testing. To handle this issue it's recommended to call two methods consequently to shut down cache:
+While I am still working on the persistence, the `shutdown()` does not works the way you may think, it's actually purges all memory items to the disk cache and closes the file access. Therefore you might find huge files left after testing. To handle this issue it's recommended to call two methods consequently to shut down cache:
 {{{
     myUriCache.clear();     // removes all items from the cache
     myUriCache.shutdown();  // closes the cache 
@@ -129,6 +129,7 @@ You can get an idea about about coding looking at the [http://hackystat-utilitie
 
 
 
+ 
  
  
  
