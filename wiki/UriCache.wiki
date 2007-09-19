@@ -40,7 +40,7 @@ Before obtaining the !UriCache instance you need to configure cache properties f
 || !UriCache property || Default property value || Method to set the custom value ||
 || cacheRegionName || "UriCache" || setCacheRegionName(String cacheName) ||
 || maxIdleTime || 86400 ms, i.e. 24 hours|| setMaxIdleTime(Long idleTime) ||
-|| maxMemoryCAcheCapacity || 10000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
+|| maxMemoryCacheCapacity || 10000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
 || cacheStoragePath || current system TEMP folder || setCacheStoragePath(String storagePath) ||
 || loggerLevel || Level.OFF || setLoggerLevel(Level level) ||
 Basically the default !UriCacheProperties instance might be used for most of the cache instances you need.
@@ -129,6 +129,7 @@ You can get an idea about about coding looking at the [http://hackystat-utilitie
 
 
 
+ 
  
  
  
