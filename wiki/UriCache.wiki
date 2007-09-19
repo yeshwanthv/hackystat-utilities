@@ -17,7 +17,7 @@ Current implementation of the !UriCache use the background memory shrinker which
 
 = 2.0 Downloading =
 
-You will normally want to download the latest distribution of the !UriCache with others !HackyStat utilities from the [http://hackystat-utilities.googlecode.com/downloads/list Downloads] page. The file will be named hackystat-utilities-{version}.zip. Inside the archive you will find a uricache.lib.jar file which is the !UriCache library.
+You will normally want to download the latest distribution of the !UriCache with others !HackyStat utilities from the [http://code.google.com/p/hackystat-utilities/downloads/list Downloads] page. The file will be named hackystat-utilities-{version}.zip. Inside the archive you will find a uricache.lib.jar file which is the !UriCache library.
 
 It is also possible to download the sources from the [http://code.google.com/p/hackystat-utilities/source Hackystat-Utilities SVN repository], but in that case you will need to build the library from sources. The distribution package comes with both sources and a pre-built libraries.
 
@@ -127,6 +127,7 @@ You can get an idea about about coding looking at the [http://hackystat-utilitie
 
 
 
+ 
  
  
  
