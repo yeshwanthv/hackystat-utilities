@@ -9,9 +9,9 @@ The !UriCache system is a wrapper around the [http://jakarta.apache.org/jcs/ Apa
 
 !UriCache is a memory cache which is backed by an indexed disk cache.  !UriCache will expire items from the cache according to two techniques. 
 
- * If the user specifies an expiration time when adding an item, the item will be removed soon after this expiration time is reached. By default, items expire 24 hours after being added.
+ # If the user specifies an expiration time when adding an item, the item will be removed soon after this expiration time is reached. By default, items expire 24 hours after being added.
 
- * If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
+ # If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
 
 The principles for this cache have been discussed in the following thread: [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
 
@@ -136,6 +136,8 @@ You can get an idea about about coding looking at the [http://hackystat-utilitie
 
 
 
+ 
+ 
  
  
  
