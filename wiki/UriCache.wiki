@@ -5,15 +5,18 @@
 
 This User Guide provides instructions on how to download, install, configure, and use the Hackystat !UriCache library. It also provides simple examples of library usage.
 
-The !UriCache system is a wrapper around [http://jakarta.apache.org/jcs/ Apache JCS] system which provides a backbone of the caching mechanism (and brings some overhead with libraries).
+The !UriCache system is a wrapper around the [http://jakarta.apache.org/jcs/ Apache JCS] system. It is designed to provide an API well suited to the needs of Hackystat services. 
 
-!UriCache is the memory cache backed by the indexed disk cache which works according Least Recently Used (LRU) algorithm which discards (or purges onto disk storage if it has capacity to handle) the least recently used items first. The idea behind the implementing of this library is the communications optimization between Hackystat 8 components which described in the Philip's post [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
+!UriCache is a memory cache which is backed by an indexed disk cache.  !UriCache will expire items from the cache according to two techniques. 
 
-The current !UriCache implementation assumes that cached items are not eternal, i.e. they can expire. By default items will expire in 24 hours after they are added to the cache, it is possible to change auto expiration time by specifying another value. Note, that it is possible to specify items expiration time by maximum memory idle time also, items will be actively removed from the cache if they are not used within the time frame specified.
+ * If the user specifies an expiration time when adding an item, the item will be removed soon after this expiration time is reached. By default, items expire 24 hours after being added.
 
-Also you can define the maximum life of an individual item by setting the expirationTimeStamp parameter when adding item in the cache. If an item has been in the cache for longer than the set timestamp value it will be removed from the cache. Note that this method overrides the high-level expiration settings. 
+ * If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
 
-Current implementation of the !UriCache use the background memory shrinker which runs each 60 seconds to delete items which are expired. I know that shrinker has some issues and working on it.
+The principles for this cache have been discussed in the following thread: [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
+
+
+The !UriCache uses a background memory shrinker which runs every 60 seconds to delete items which are expired. This shrinker is not yet fully functional.
 
 = 2.0 Downloading =
 
@@ -23,17 +26,17 @@ It is also possible to download the sources from the [http://code.google.com/p/h
 
 = 3.0 Prerequisites =
 
-Before using UriCache library you will need to install next packages and configure environment variables along with CLASSPATH variables within the Eclipse as follows:
+If you wish to build the UriCache system from sources, you will need to install the following packages, environment variables, and Eclipse classpath variables as follows:
 
 || *Package* || *Version* || *Environment/Classpath Variable* || *Sample Env Value* ||
 || [http://commons.apache.org/logging/ Apache Commons Logging] || 1.1 ||APACHE_COMMONS_LOGGING_HOME || c:\tools\commons-logging-1.1 ||
 || [http://jakarta.apache.org/jcs/ Apache Java Caching System] || 1.3 || APACHE_JCS_HOME || c:\tools\apache-jcs-1.3 ||
 
-While !UriCache as JCS relies on usage of util.concurrent Release 1.3.4. by [http://gee.cs.oswego.edu/dl Doug Lea] this particular library included within the !UriCache package.
+!UriCache also uses the util.concurrent Release 1.3.4. by [http://gee.cs.oswego.edu/dl Doug Lea] which is included within the !UriCache package.
 
 = 4.0 Usage =
 
-In order to use !UriCache library in your code you need to put uricache.lib.jar within your build and run CLASSPATH. 
+In order to use !UriCache library in your code, you must have uricache.lib.jar in your classpath at both build and run time.
 
 == 4.1. Configuring !UriCacheProperties == 
 Before obtaining the !UriCache instance you need to configure cache properties first. Upon instantiation of !UriCacheProperties next parameters set to their default values:
@@ -129,6 +132,8 @@ You can get an idea about about coding looking at the [http://hackystat-utilitie
 
 
 
+ 
+ 
  
  
  
