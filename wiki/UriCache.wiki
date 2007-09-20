@@ -39,7 +39,9 @@ If you wish to build the UriCache system from sources, you will need to install 
 In order to use !UriCache library in your code, you must have uricache.lib.jar in your classpath at both build and run time.
 
 == 4.1. Configuring !UriCacheProperties == 
-Before obtaining the !UriCache instance you need to configure cache properties first. Upon instantiation of !UriCacheProperties next parameters set to their default values:
+
+Each !UriCache instance is instantiated according to a set of properties specified as a !UriCacheProperties instance.  The following table indicates these properties and their default values:
+
 || !UriCache property || Default property value || Method to set the custom value ||
 || cacheRegionName || "!UriCache" || setCacheRegionName(String cacheName) ||
 || maxIdleTime || 86400 ms, i.e. 24 hours|| setMaxIdleTime(Long idleTime) ||
@@ -48,11 +50,12 @@ Before obtaining the !UriCache instance you need to configure cache properties f
 || loggerLevel || Level.OFF || setLoggerLevel(Level level) ||
 Basically the default !UriCacheProperties instance might be used for most of the cache instances you need.
 
-You also can find additional information at the [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCacheProperties.html UriCacheProperties Javadoc page]
+You can find additional information at the [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCacheProperties.html UriCacheProperties Javadoc page]
 
 == 4.2. Getting cache instance ==
 
 Use the default constructors to get !UriCacheProperties and !UriCache instance:
+
 {{{
    UriCacheProperties prop = new UriCacheProperties();
    UriCache myURICache<String, String> = new UriCache<String, String>();
@@ -89,7 +92,7 @@ If you are going to create multiple caches in your code don't forget to assign d
 
 == 4.3. Caching an item ==
 
-To cache an item you may use two methods:
+To cache an item you can use two methods:
 
   `cache(K uriString, V obj)` - this methods caches the item using first parameter as the key.
 
@@ -97,21 +100,21 @@ To cache an item you may use two methods:
 
 == 4.4. Retrieving items from the cache ==
 
-To check an item presence within the cache and retrieve it `lookup(K uriString)` method used. It returns item if it was found within the cache or `null` if it wasn't.
+To check an item presence within the cache and retrieve it, use `lookup(K uriString)`. It returns the item if it was found within the cache and `null` otherwise.
 
 == 4.5. Removing object from cache == 
 
-To remove an item from cache `remove(K uriString)` method might be used.
+To remove an item from cache, use `remove(K uriString)`.
 
-You may use a `clear()` method to purge the whole cache.
+You can also use the `clear()` method to purge the whole cache.
 
 == 4.6. Automatically purging the cache items by memory idle time ==
 
-To specify a time interval value for the automatic cache purging the `setMaxMemoryIdleTimeSeconds(int seconds)` method used. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
+To specify a time interval value for the automatic cache purging, use the `setMaxMemoryIdleTimeSeconds(int seconds)` method. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
 
 == 4.7. Shutting down the cache ==
 
-While I am still working on the persistence, the `shutdown()` does not works the way you may think, it's actually purges all memory items to the disk cache and closes the file access. Therefore you might find huge files left after testing. To handle this issue it's recommended to call two methods consequently to shut down cache:
+I am still working on persistence.  Note that the `shutdown()` does not works the way you may think: it actually purges all memory items to the disk cache and closes the file access. Therefore you might find huge files left after testing. To handle this issue it's recommended to call two methods consequently to shut down cache:
 {{{
     myUriCache.clear();     // removes all items from the cache
     myUriCache.shutdown();  // closes the cache 
@@ -120,6 +123,7 @@ While I am still working on the persistence, the `shutdown()` does not works the
 You may want see [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCache.html UriCache JavaDocs] for additional information.
 
 = 5.0 Code samples = 
+
 You can get an idea about about coding looking at the [http://hackystat-utilities.googlecode.com/svn/trunk/src/org/hackystat/utilities/uricache/TestUriCache.java UriCache test].
 
 
@@ -132,6 +136,7 @@ You can get an idea about about coding looking at the [http://hackystat-utilitie
 
 
 
+ 
  
  
  
