@@ -47,7 +47,7 @@ Each !UriCache instance is instantiated according to a set of properties specifi
 || maxMemoryCacheCapacity || 10000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
 || cacheStoragePath || current system TEMP folder || setCacheStoragePath(String storagePath) ||
 || loggerLevel || Level.OFF || setLoggerLevel(Level level) ||
-Basically the default !UriCacheProperties instance might be used for most of the cache instances you need.
+ 
 
 You can find additional information at the [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCacheProperties.html UriCacheProperties Javadoc page]
 
@@ -135,6 +135,7 @@ You can get an idea about about coding looking at the [http://hackystat-utilitie
 
 
 
+ 
  
  
  
