@@ -15,7 +15,7 @@ The !UriCache system is a wrapper around the [http://jakarta.apache.org/jcs/ Apa
 The principles for this cache have been discussed in the following thread: [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
 
 
-The !UriCache uses a background memory shrinker which runs every 60 seconds to delete items which are expired. This shrinker is not yet fully functional.
+The !UriCache uses a background memory shrinker which runs every 60 seconds to delete items which are expired.
 
 = 2.0 Downloading =
 
