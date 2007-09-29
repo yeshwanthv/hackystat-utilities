@@ -11,6 +11,7 @@ Summary of changes:
  * It provides persistence and hooked to shutdown call.
  * The underlying caching mechanism now is `org.apache.jcs.auxiliary.disk.indexed.IndexedDiskCache`, which is different from previous  LRU Memory cacahe + !Auxiliary DiskCache mechanism. In this implementation all keys of cached items reside in the memory along with disk indexes while items itself stored on the hard drive.
  * Shrinker thread is fully functional now.
+ * Improved test coverage.
  
 
 
