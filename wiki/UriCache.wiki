@@ -61,7 +61,7 @@ Use the default constructors to get !UriCacheProperties and !UriCache instance:
 
 {{{
    UriCacheProperties prop = new UriCacheProperties();
-   UriCache myURICache<String, String> = new UriCache<String, String>();
+   UriCache<String, String> myURICache = new UriCache<String, String>("myURICache", prop);
 }}}
 
 If you are going to create multiple caches in your code don't forget to assign different names to each of those, since these names are file names for the storage, for example:
@@ -70,21 +70,18 @@ If you are going to create multiple caches in your code don't forget to assign d
     // create three properties first
     UriCacheProperties stringCacheProp = new UriCacheProperties();
     stringCacheProp.setCacheStoragePath("sandbox/cache");
-    stringCacheProp.setCacheRegionName("StringsCache");
 
     UriCacheProperties intCacheProp = new UriCacheProperties();
     intCacheProp.setCacheStoragePath("sandbox/cache");
-    intCacheProp.setCacheRegionName("IntegerCache");
 
     UriCacheProperties doubleCacheProp = new UriCacheProperties();
     doubleCacheProp.setCacheStoragePath("sandbox/cache");
-    doubleCacheProp.setCacheRegionName("DoubleCache");
 
     try {
       // create cache instances
-      UriCache<String, String> stringCache = new UriCache<String, String>(stringCacheProp);
-      UriCache<String, Integer> integerCache = new UriCache<String, Integer>(intCacheProp);
-      UriCache<String, Double> doubleCache = new UriCache<String, Double>(doubleCacheProp);
+      UriCache<String, String> stringCache = new UriCache<String, String>("StringsCache", stringCacheProp);
+      UriCache<String, Integer> integerCache = new UriCache<String, Integer>("IntegerCache", intCacheProp);
+      UriCache<String, Double> doubleCache = new UriCache<String, Double>("DoubleCache", doubleCacheProp);
     }
     catch (UriCacheException e) {
       fail("Unable to proceed with cache instantiation: "
