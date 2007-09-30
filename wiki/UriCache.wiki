@@ -7,15 +7,19 @@ This User Guide provides instructions on how to download, install, configure, an
 
 The !UriCache system is a wrapper around the [http://jakarta.apache.org/jcs/ Apache JCS] system. It is designed to provide an API well suited to the needs of Hackystat services. 
 
-!UriCache is a memory cache which is backed by an indexed disk cache.  !UriCache will expire items from the cache according to two algorithms:
+!UriCache relies the JCS !IndexedDiskCache implementation which stores keys and indexes in the memory and all the data on the hard drive. !UriCache is persistent cache, which means if application was shutdown and !UriCache was able to properly store all the data on the hard drive, it will restore all of the cache content when it will be instantiated by the application again.
 
-  # If the user specifies an expiration time when adding an item, the item will be removed soon after this expiration time is reached. By default, items expire 24 hours after being added.  
+Both, keys and actual values for the cached items must be Serializable.
+
+!UriCache will expire items from the cache according to two algorithms:
+
+  # If the user specifies an expiration time when adding an item, the item will be removed after this expiration time is reached. By default, items expire 24 hours after being added. It is possible to specify expiration ti,e for the each item individually. 
   # If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
 
 The principles for this cache have been discussed in the following thread: [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
 
 
-The !UriCache uses a background memory shrinker which runs every 60 seconds to delete items which are expired.
+The !UriCache uses a background optimizer which runs every (this is uncertain) 60 seconds to delete items which are expired.
 
 = 2.0 Downloading =
 
@@ -44,7 +48,7 @@ Each !UriCache instance is instantiated according to a set of properties specifi
 || !UriCache property || Default property value || Method to set the custom value ||
 || cacheRegionName || "!UriCache" || setCacheRegionName(String cacheName) ||
 || maxIdleTime || 86400 ms, i.e. 24 hours|| setMaxIdleTime(Long idleTime) ||
-|| maxMemoryCacheCapacity || 10000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
+|| maxMemoryCacheCapacity || 50000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
 || cacheStoragePath || current system TEMP folder || setCacheStoragePath(String storagePath) ||
 || loggerLevel || Level.OFF || setLoggerLevel(Level level) ||
  
@@ -60,7 +64,7 @@ Use the default constructors to get !UriCacheProperties and !UriCache instance:
    UriCache myURICache<String, String> = new UriCache<String, String>();
 }}}
 
-If you are going to create multiple caches in your code don't forget to assign different names to each of those, for example:
+If you are going to create multiple caches in your code don't forget to assign different names to each of those, since these names are file names for the storage, for example:
 
 {{{
     // create three properties first
@@ -89,13 +93,14 @@ If you are going to create multiple caches in your code don't forget to assign d
 
 }}}
 
+
 == 4.3. Caching an item ==
 
 To cache an item you can use two methods:
 
-  `cache(K uriString, V obj)` - this methods caches the item using first parameter as the key.
+  `cache(Serializable uriString, Serializable obj)` - this methods caches the item using first parameter as the key.
 
-  `cache(K uriString, V obj, XMLGregorianCalendar expirationTime)` - this method caches an item and specifies its expiration time.
+  `cache(Serializable uriString, Serializable obj, XMLGregorianCalendar expirationTime)` - this method caches an item and specifies its expiration time.
 
 == 4.4. Retrieving items from the cache ==
 
@@ -113,7 +118,7 @@ To specify a time interval value for the automatic cache purging, use the `setMa
 
 == 4.7. Shutting down the cache ==
 
-I am still working on persistence.  Note that the `shutdown()` does not works the way you may think: it actually purges all memory items to the disk cache and closes the file access. Therefore you might find huge files left after testing. To handle this issue it's recommended to call two methods consequently to shut down cache:
+Note that the `shutdown()` does not clears all elements from the cache, instead it stores both keys and values on the hard drive in order to load this data on the next start. If you want cache to be reset run `clear()` befor shutting cache down:
 {{{
     myUriCache.clear();     // removes all items from the cache
     myUriCache.shutdown();  // closes the cache 
@@ -124,14 +129,6 @@ You may want see [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/or
 = 5.0 Code samples = 
 
 You can get an idea about about coding looking at the [http://hackystat-utilities.googlecode.com/svn/trunk/src/org/hackystat/utilities/uricache/TestUriCache.java UriCache test].
-
-
-
-
-
-
-
-
 
 
 
