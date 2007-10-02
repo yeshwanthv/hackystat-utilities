@@ -46,7 +46,6 @@ In order to use !UriCache library in your code, you must have uricache.lib.jar i
 Each !UriCache instance is instantiated according to a set of properties specified as a !UriCacheProperties instance.  The following table indicates these properties and their default values:
 
 || !UriCache property || Default property value || Method to set the custom value ||
-|| cacheRegionName || "!UriCache" || setCacheRegionName(String cacheName) ||
 || maxIdleTime || 86400 ms, i.e. 24 hours|| setMaxIdleTime(Long idleTime) ||
 || maxMemoryCacheCapacity || 50000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
 || cacheStoragePath || current system TEMP folder || setCacheStoragePath(String storagePath) ||
