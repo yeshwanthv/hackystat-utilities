@@ -7,7 +7,7 @@ This User Guide provides instructions on how to download, install, configure, an
 
 The !UriCache system is a wrapper around the [http://jakarta.apache.org/jcs/ Apache JCS] system. It is designed to provide an API well suited to the needs of Hackystat services. 
 
-!UriCache relies the JCS !IndexedDiskCache implementation which stores keys and indexes in the memory and all the data on the hard drive. !UriCache is persistent cache, which means if application was shutdown and !UriCache was able to properly store all the data on the hard drive, it will restore all of the cache content when it will be instantiated by the application again.
+!UriCache relies the JCS !IndexedDiskCache implementation which stores keys and indexes in the memory while all the actual data is stored on the hard drive. !UriCache is persistent cache, which means if application was shutdown and !UriCache was able to properly store all the data on the hard drive, it will restore all of the cache content when it will be instantiated by the application again.
 
 Both, keys and actual values for the cached items must be Serializable.
 
