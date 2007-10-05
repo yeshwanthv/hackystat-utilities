@@ -2,10 +2,10 @@
 
 Each Hackystat utility is provided within its own package, and is distributed by way of a jar file.  Documentation for simple utilities may consist only of their JavaDoc documentation. More complex utilities, such as UriCache, have their own documentation page. The following table lists the currently available utilities.  
 
-|| *Utility* || *JavaDoc*  || *User Guide* ||
-|| HackystatLogger || [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/logger/package-summary.html HackystatLogger JavaDoc] || || 
+|| *Utility* || *!JavaDoc*  || *User Guide* ||
+|| !HackystatLogger || [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/logger/package-summary.html HackystatLogger JavaDoc] || || 
 || TStamp, TStampSet || [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/tstamp/package-summary.html TStamp, TstampSet JavaDoc] || || 
-|| StackTrace || [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/stacktrace/package-summary.html StackTrace JavaDoc] || || 
-|| UriCache || [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/package-summary.html UriCache JavaDoc] || [http://code.google.com/p/hackystat-utilities/wiki/UriCache UriCache UserGuide] ||
+|| !StackTrace || [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/stacktrace/package-summary.html StackTrace JavaDoc] || || 
+|| !UriCache || [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/package-summary.html UriCache JavaDoc] || [http://code.google.com/p/hackystat-utilities/wiki/UriCache UriCache UserGuide] ||
 
  
