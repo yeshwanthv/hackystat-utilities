@@ -4,7 +4,7 @@
 === October 16, 2007 Milestone Release ===
 
 Summary of changes:
-  * UriCache improvements (disk-based backing store) (Issue 10)
+  * UriCache improvements (disk-based backing store, cache statistics) (Issue 10)
   * time.lib.jar provides time period and time interval classes. (Issue 11)
 
 === October 2, 2007 Milestone Release ===
