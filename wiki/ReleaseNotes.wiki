@@ -6,7 +6,7 @@
 Summary of changes:
   * Provided a !HackystatUserHome class that returns the directory in which the .hackystat file should be found (Issue 14)
 
-=== Nov 13, 2007 Milestone Release ===
+=== Nov 13, 2007 Milestone Release === 
 
 Summary of changes:
   * Provided a utility class to send Restlet Logging to a file (Issue 13).
