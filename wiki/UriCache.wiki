@@ -7,23 +7,22 @@ This User Guide provides instructions on how to download, install, configure, an
 
 The !UriCache system is a wrapper around the [http://jakarta.apache.org/jcs/ Apache JCS] system. It is designed to provide an API well suited to the needs of Hackystat services. 
 
-!UriCache relies the JCS !IndexedDiskCache implementation which stores keys and indexes in the memory while all the actual data is stored on the hard drive. !UriCache is persistent cache, which means if application was shutdown and !UriCache was able to properly store all the data on the hard drive, it will restore all of the cache content when it will be instantiated by the application again.
+!UriCache relies the JCS !IndexedDiskCache implementation which stores keys and indexes in the memory while all the actual data is stored on the hard drive. !UriCache is a persistent cache, which means that if the Hackystat service is shutdown and !UriCache is able to properly store all the data on the hard drive, it will restore all of the cache content when it is instantiated by the application again.
 
-Both, keys and actual values for the cached items must be Serializable.
+Note that both keys and actual values for the cached items must be Serializable.
 
 !UriCache will expire items from the cache according to two algorithms:
 
-  # If the user specifies an expiration time when adding an item, the item will be removed after this expiration time is reached. By default, items expire 24 hours after being added. It is possible to specify expiration ti,e for the each item individually. 
+  # If the user specifies an expiration time when adding an item, then the item will be removed after this expiration time is reached. By default, items expire 24 hours after being added. It is possible to specify an expiration time for the each item individually. 
   # If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
 
 The principles for this cache have been discussed in the following thread: [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
 
-
-The !UriCache uses a background optimizer which runs every (this is uncertain) 60 seconds to delete items which are expired.
+The !UriCache uses a background optimizer which runs (approximately) every 60 seconds to delete items which are expired.
 
 = 2.0 Downloading =
 
-You will normally want to download the latest distribution of the !UriCache with others !HackyStat utilities from the [http://code.google.com/p/hackystat-utilities/downloads/list Downloads] page. The file will be named hackystat-utilities-{version}.zip. Inside the archive you will find a uricache.lib.jar file which is the !UriCache library.
+The !UriCache package is distributed as part of the Hackystat Utilities package, which is incorporated by default into all Hackystat services.  Thus, in most cases you do not need to do anything extra to download or install the !UriCache; it is already prpresent in your system.
 
 It is also possible to download the sources from the [http://code.google.com/p/hackystat-utilities/source Hackystat-Utilities SVN repository], but in that case you will need to build the library from sources. The distribution package comes with both sources and a pre-built libraries.
 
@@ -39,8 +38,6 @@ If you wish to build the UriCache system from sources, you will need to install 
 
 = 4.0 Usage =
 
-In order to use !UriCache library in your code, you must have uricache.lib.jar in your classpath at both build and run time.
-
 == 4.1. Configuring !UriCacheProperties == 
 
 Each !UriCache instance is instantiated according to a set of properties specified as a !UriCacheProperties instance.  The following table indicates these properties and their default values:
@@ -52,61 +49,60 @@ Each !UriCache instance is instantiated according to a set of properties specifi
 || loggerLevel || Level.OFF || setLoggerLevel(Level level) ||
  
 
-You can find additional information at the [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCacheProperties.html UriCacheProperties Javadoc page]
+You can find additional information at the [http://hackystat-utilities.googlecode.com/svn/javadoc/org/hackystat/utilities/uricache/UriCacheProperties.html UriCacheProperties JavaDoc page].
 
-== 4.2. Getting cache instance ==
+== 4.2. Creating a cache instance ==
 
-Use the default constructors to get !UriCacheProperties and !UriCache instance:
+The following code indicates the typical way to create a new !UriCache:
 
 {{{
-   UriCacheProperties prop = new UriCacheProperties();
-   UriCache<String, String> myURICache = new UriCache<String, String>("myURICache", prop);
+UriCacheProperties prop = new UriCacheProperties();
+UriCache<String, String> myURICache = new UriCache<String, String>("myURICache", prop);
 }}}
 
 If you are going to create multiple caches in your code don't forget to assign different names to each of those, since these names are file names for the storage, for example:
 
 {{{
-    // create three properties first
-    UriCacheProperties stringCacheProp = new UriCacheProperties();
-    stringCacheProp.setCacheStoragePath("sandbox/cache");
+// create three properties first
+UriCacheProperties stringCacheProp = new UriCacheProperties();
+stringCacheProp.setCacheStoragePath("sandbox/cache");
 
-    UriCacheProperties intCacheProp = new UriCacheProperties();
-    intCacheProp.setCacheStoragePath("sandbox/cache");
+UriCacheProperties intCacheProp = new UriCacheProperties();
+intCacheProp.setCacheStoragePath("sandbox/cache");
 
-    UriCacheProperties doubleCacheProp = new UriCacheProperties();
-    doubleCacheProp.setCacheStoragePath("sandbox/cache");
+UriCacheProperties doubleCacheProp = new UriCacheProperties();
+doubleCacheProp.setCacheStoragePath("sandbox/cache");
 
-    try {
-      // create cache instances
-      UriCache<String, String> stringCache = new UriCache<String, String>("StringsCache", stringCacheProp);
-      UriCache<String, Integer> integerCache = new UriCache<String, Integer>("IntegerCache", intCacheProp);
-      UriCache<String, Double> doubleCache = new UriCache<String, Double>("DoubleCache", doubleCacheProp);
-    }
-    catch (UriCacheException e) {
-      fail("Unable to proceed with cache instantiation: "
-          + formatter.format(new LogRecord(Level.ALL, e.toString())));
-    }
-
+try {
+  // create cache instances
+  UriCache<String, String> stringCache = new UriCache<String, String>("StringsCache", stringCacheProp);
+  UriCache<String, Integer> integerCache = new UriCache<String, Integer>("IntegerCache", intCacheProp);
+  UriCache<String, Double> doubleCache = new UriCache<String, Double>("DoubleCache", doubleCacheProp);
+}
+catch (UriCacheException e) {
+  fail("Unable to proceed with cache instantiation: "
+       + formatter.format(new LogRecord(Level.ALL, e.toString())));
+}
 }}}
 
 
 == 4.3. Caching an item ==
 
-To cache an item you can use two methods:
+To cache an item you can either of the following two methods:
 
-  `cache(Serializable uriString, Serializable obj)` - this methods caches the item using first parameter as the key.
+  * `cache(Serializable uriString, Serializable obj)`. This method caches the item using first parameter as the key.
 
-  `cache(Serializable uriString, Serializable obj, XMLGregorianCalendar expirationTime)` - this method caches an item and specifies its expiration time.
+  * `cache(Serializable uriString, Serializable obj, XMLGregorianCalendar expirationTime)`. This method caches an item and specifies its expiration time.
 
 == 4.4. Retrieving items from the cache ==
 
-To check an item presence within the cache and retrieve it, use `lookup(K uriString)`. It returns the item if it was found within the cache and `null` otherwise.
+To check whether an item is present within the cache and retrieve it, use `lookup(K uriString)`. It returns the item if it was found within the cache and `null` otherwise.
 
 == 4.5. Removing object from cache == 
 
 To remove an item from cache, use `remove(K uriString)`.
 
-You can also use the `clear()` method to purge the whole cache.
+You can also use the `clear()` method to remove all items from the cache.
 
 == 4.6. Automatically purging the cache items by memory idle time ==
 
@@ -114,17 +110,17 @@ To specify a time interval value for the automatic cache purging, use the `setMa
 
 == 4.7. Shutting down the cache ==
 
-Note that the `shutdown()` does not clears all elements from the cache, instead it stores both keys and values on the hard drive in order to load this data on the next start. If you want cache to be reset run `clear()` befor shutting cache down:
+Note that the `shutdown()` does not clear all elements from the cache. Instead it stores both keys and values on the hard drive in order to load this data on the next start. If you want cache to be reset run `clear()` befor shutting cache down:
 {{{
-    myUriCache.clear();     // removes all items from the cache
-    myUriCache.shutdown();  // closes the cache 
+myUriCache.clear();     // removes all items from the cache
+myUriCache.shutdown();  // closes the cache 
 }}}
 
-You may want see [http://hackystat-utilities.googlecode.com/svn/trunk/javadoc/org/hackystat/utilities/uricache/UriCache.html UriCache JavaDocs] for additional information.
+You may want see [http://hackystat-utilities.googlecode.com/svn/javadoc/org/hackystat/utilities/uricache/UriCache.html UriCache JavaDocs] for additional information.
 
 = 5.0 Code samples = 
 
-You can get an idea about about coding looking at the [http://hackystat-utilities.googlecode.com/svn/trunk/src/org/hackystat/utilities/uricache/TestUriCache.java UriCache test].
+You can get an idea about about coding the !UriCache by looking at the [http://hackystat-utilities.googlecode.com/svn/trunk/src/org/hackystat/utilities/uricache/TestUriCache.java TestUriCache.java] file.
 
 
 
