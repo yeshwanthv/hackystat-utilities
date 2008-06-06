@@ -42,9 +42,9 @@ If you wish to build the UriCache system from sources, you will need to install 
 
 = 4.0 Usage =
 
-== 4.1. The NewUriCache constructor == 
+== 4.1. The !NewUriCache constructor == 
 
-For historical reasons, the constructor for the UriCache is called NewUriCache.  To create an instance of a UriCache, you can use either one of the two UriCache constructors:
+For historical reasons, the constructor for the UriCache is called !NewUriCache.  To create an instance of a !UriCache, you can use either one of the two !UriCache constructors:
 
 {{{
 new UriCache(String cacheName, String subDir)
@@ -56,7 +56,7 @@ or
 new UriCache(String cacheName, String subDir, Double maxLifeDays, Long capacity)
 }}}
 
-These constructors indicate the two required and two optional properties available for UriCaches:
+These constructors indicate the two required and two optional properties available for !UriCaches:
 
 || Property || Default || Description ||
 || cacheName || N/A || All !UriCaches must be passed a unique name, which will be used as the name for the disk cache file. || 
@@ -107,9 +107,9 @@ Here is an example method from the !DailyProjectData service that shows the use 
 
 Note that we do not add entries to the cache for data from the current day.  This is because we expect that data from the current day will be changing and so we want to recompute this data from scratch each time we require it. 
 
-== 4.3 The UriCache shutdown hook ==
+== 4.3 The !UriCache shutdown hook ==
 
-The UriCache installs a shutdown hook which calls dispose() on all instantiated caches when the JVM exits.  This is intended to ensure that the disk cache gets closed correctly. 
+The !UriCache installs a shutdown hook which calls dispose() on all instantiated caches when the JVM exits.  This is intended to ensure that the disk cache gets closed correctly. 
 
 
 
