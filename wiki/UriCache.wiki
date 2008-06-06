@@ -11,9 +11,9 @@ The !UriCache system is a wrapper around the
 [http://jakarta.apache.org/jcs/ Apache JCS] system. It is designed to
 provide an API well suited to the needs of Hackystat services.
 
-!UriCache is configured to use the JCS !IndexedDiskCache auxiliary cache. 
-This means that any items added to the cache after exceeding the in-memory 
-capacity will be spooled to disk.  
+!UriCache is configured to use the JCS !IndexedDiskCache auxiliary cache
+using the "UPDATE" access pattern.  This means that all items added to the
+cache will also be spooled to disk.
 
 Note that both keys and values for the cached items must be Serializable.
 
