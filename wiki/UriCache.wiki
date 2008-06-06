@@ -3,20 +3,24 @@
 
 = 1.0 Introduction =
 
-This User Guide provides instructions on how to download, install, configure, and use the Hackystat !UriCache library. It also provides simple examples of library usage.
+This User Guide provides instructions on how to download, install,
+configure, and use the Hackystat !UriCache library. It also provides simple
+examples of library usage.
 
-The !UriCache system is a wrapper around the [http://jakarta.apache.org/jcs/ Apache JCS] system. It is designed to provide an API well suited to the needs of Hackystat services. 
+The !UriCache system is a wrapper around the
+[http://jakarta.apache.org/jcs/ Apache JCS] system. It is designed to
+provide an API well suited to the needs of Hackystat services.
 
-!UriCache relies the JCS !IndexedDiskCache implementation which stores keys and indexes in the memory while all the actual data is stored on the hard drive. !UriCache is a persistent cache, which means that if the Hackystat service is shutdown and !UriCache is able to properly store all the data on the hard drive, it will restore all of the cache content when it is instantiated by the application again.
+!UriCache is configured to use the JCS !IndexedDiskCache auxiliary cache. 
+This means that any items added to the cache after exceeding the in-memory 
+capacity will be spooled to disk.  
 
-Note that both keys and actual values for the cached items must be Serializable.
+Note that both keys and values for the cached items must be Serializable.
 
 !UriCache will expire items from the cache according to two algorithms:
 
   # If the user specifies an expiration time when adding an item, then the item will be removed after this expiration time is reached. By default, items expire 24 hours after being added. It is possible to specify an expiration time for the each item individually. 
   # If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
-
-The principles for this cache have been discussed in the following thread: [http://groups.google.com/group/hackystat-dev/msg/9379f301b9db710b "RFC: Caching"].
 
 The !UriCache uses a background optimizer which runs (approximately) every 60 seconds to delete items which are expired.
 
@@ -34,93 +38,78 @@ If you wish to build the UriCache system from sources, you will need to install 
 || [http://commons.apache.org/logging/ Apache Commons Logging] || 1.1 ||APACHE_COMMONS_LOGGING_HOME || c:\tools\commons-logging-1.1 ||
 || [http://jakarta.apache.org/jcs/ Apache Java Caching System] || 1.3 || APACHE_JCS_HOME || c:\tools\apache-jcs-1.3 ||
 
-!UriCache also uses the util.concurrent Release 1.3.4. by [http://gee.cs.oswego.edu/dl Doug Lea] which is included within the !UriCache package.
+!UriCache also uses the util.concurrent Release 1.3.4. by [http://gee.cs.oswego.edu/dl Doug Lea] which is included in the hackystat-utilities project in its lib/ directory.
 
 = 4.0 Usage =
 
-== 4.1. Configuring !UriCacheProperties == 
+== 4.1. The NewUriCache constructor == 
 
-Each !UriCache instance is instantiated according to a set of properties specified as a !UriCacheProperties instance.  The following table indicates these properties and their default values:
-
-|| !UriCache property || Default property value || Method to set the custom value ||
-|| maxIdleTime || 86400 ms, i.e. 24 hours|| setMaxIdleTime(Long idleTime) ||
-|| maxMemoryCacheCapacity || 50000 items || setMaxMemoryCacpacity(Long maxMemoryCacheCapacity) ||
-|| cacheStoragePath || current system TEMP folder || setCacheStoragePath(String storagePath) ||
-|| loggerLevel || Level.OFF || setLoggerLevel(Level level) ||
- 
-
-You can find additional information at the [http://hackystat-utilities.googlecode.com/svn/javadoc/org/hackystat/utilities/uricache/UriCacheProperties.html UriCacheProperties JavaDoc page].
-
-== 4.2. Creating a cache instance ==
-
-The following code indicates the typical way to create a new !UriCache:
+For historical reasons, the constructor for the UriCache is called NewUriCache.  To create an instance of a UriCache, you can use either one of the two UriCache constructors:
 
 {{{
-UriCacheProperties prop = new UriCacheProperties();
-UriCache<String, String> myURICache = new UriCache<String, String>("myURICache", prop);
+new UriCache(String cacheName, String subDir)
 }}}
 
-If you are going to create multiple caches in your code don't forget to assign different names to each of those, since these names are file names for the storage, for example:
+or 
 
 {{{
-// create three properties first
-UriCacheProperties stringCacheProp = new UriCacheProperties();
-stringCacheProp.setCacheStoragePath("sandbox/cache");
-
-UriCacheProperties intCacheProp = new UriCacheProperties();
-intCacheProp.setCacheStoragePath("sandbox/cache");
-
-UriCacheProperties doubleCacheProp = new UriCacheProperties();
-doubleCacheProp.setCacheStoragePath("sandbox/cache");
-
-try {
-  // create cache instances
-  UriCache<String, String> stringCache = new UriCache<String, String>("StringsCache", stringCacheProp);
-  UriCache<String, Integer> integerCache = new UriCache<String, Integer>("IntegerCache", intCacheProp);
-  UriCache<String, Double> doubleCache = new UriCache<String, Double>("DoubleCache", doubleCacheProp);
-}
-catch (UriCacheException e) {
-  fail("Unable to proceed with cache instantiation: "
-       + formatter.format(new LogRecord(Level.ALL, e.toString())));
-}
+new UriCache(String cacheName, String subDir, Double maxLifeDays, Long capacity)
 }}}
 
+These constructors indicate the two required and two optional properties available for UriCaches:
 
-== 4.3. Caching an item ==
+|| Property || Default || Description ||
+|| cacheName || N/A || All !UriCaches must be passed a unique name, which will be used as the name for the disk cache file. || 
+|| subDir || N/A || All !UriCaches will have an auxiliary cache disk file created in the directory ~/.hackystat/*subDir*/uricache/.  This directory is created if not present. ||
+|| maxLifeDays || 1 || If a cache element is not retrieved within this number of days after being added, it is removed from the cache. ||
+|| capacity || 50000 || The default number of elements to hold in-memory before spooling them to disk. ||
 
-To cache an item you can either of the following two methods:
+== 4.2 Manipulating the cache ==
 
-  * `cache(Serializable uriString, Serializable obj)`. This method caches the item using first parameter as the key.
+Here is an example method from the !DailyProjectData service that shows the use of the get() and put() methods. The cache has been instantiated elsewhere and is accessable in the this.uriCache instance variable.
 
-  * `cache(Serializable uriString, Serializable obj, XMLGregorianCalendar expirationTime)`. This method caches an item and specifies its expiration time.
-
-== 4.4. Retrieving items from the cache ==
-
-To check whether an item is present within the cache and retrieve it, use `lookup(K uriString)`. It returns the item if it was found within the cache and `null` otherwise.
-
-== 4.5. Removing object from cache == 
-
-To remove an item from cache, use `remove(K uriString)`.
-
-You can also use the `clear()` method to remove all items from the cache.
-
-== 4.6. Automatically purging the cache items by memory idle time ==
-
-To specify a time interval value for the automatic cache purging, use the `setMaxMemoryIdleTimeSeconds(int seconds)` method. !UriCache will actively free the memory used by the items if this memory wasn't read within the time interval specified.
-
-== 4.7. Shutting down the cache ==
-
-Note that the `shutdown()` does not clear all elements from the cache. Instead it stores both keys and values on the hard drive in order to load this data on the next start. If you want cache to be reset run `clear()` befor shutting cache down:
 {{{
-myUriCache.clear();     // removes all items from the cache
-myUriCache.shutdown();  // closes the cache 
+ public synchronized CouplingDailyProjectData getCoupling(String user, String project,
+      XMLGregorianCalendar timestamp, String type, String tool) 
+  throws DailyProjectDataClientException {
+    Date startTime = new Date();
+    CouplingDailyProjectData coupling;
+    String uri = "coupling/" + user + "/" + project + "/" + timestamp + "/" + type + "?Tool=" 
+    + tool;
+    // Check the cache, and return the instance from it if available. 
+    if (this.isCacheEnabled) {
+      coupling = (CouplingDailyProjectData)this.uriCache.get(uri);
+      if (coupling != null) {
+        return coupling;
+      }
+    }
+    Response response = makeRequest(Method.GET, uri, null);
+    if (!response.getStatus().isSuccess()) {
+      System.err.println("coupling/" + user + "/" + project + "/" + timestamp + "/" + type);
+      throw new DailyProjectDataClientException(response.getStatus());
+    }
+    try {
+      String xmlData = response.getEntity().getText();
+      coupling = makeCouplingDailyProjectData(xmlData);
+      // Add it to the cache if we're using one.
+      if (this.isCacheEnabled && !isToday(timestamp)) {
+        this.uriCache.put(uri, coupling);
+      }
+    }
+    catch (Exception e) {
+      logElapsedTime(uri, startTime, e);
+      throw new DailyProjectDataClientException(response.getStatus(), e);
+    }
+    logElapsedTime(uri, startTime);
+    return coupling;
+  }
 }}}
 
-You may want see [http://hackystat-utilities.googlecode.com/svn/javadoc/org/hackystat/utilities/uricache/UriCache.html UriCache JavaDocs] for additional information.
+Note that we do not add entries to the cache for data from the current day.  This is because we expect that data from the current day will be changing and so we want to recompute this data from scratch each time we require it. 
 
-= 5.0 Code samples = 
+== 4.3 The UriCache shutdown hook ==
 
-You can get an idea about about coding the !UriCache by looking at the [http://hackystat-utilities.googlecode.com/svn/trunk/src/org/hackystat/utilities/uricache/TestUriCache.java TestUriCache.java] file.
+The UriCache installs a shutdown hook which calls dispose() on all instantiated caches when the JVM exits.  This is intended to ensure that the disk cache gets closed correctly. 
 
 
 
