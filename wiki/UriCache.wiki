@@ -133,7 +133,7 @@ Here, for example, is the authentication code from the !DailyProjectData server,
      * This synchronization creates a bottleneck on every request, but the benefits of reliable
      * caching should outweigh this potential performance hit under high loads. 
      */
-    synchronized (AUTHENTICATOR_SENSORBASECLIENTS_KEY) {
+    synchronized (userClientMap) {
       String secret = new String(secretCharArray);
       // Return true if the user/password credentials are in the cache.
       if (credentials.containsKey(identifier) && secret.equals(credentials.get(identifier))) {
