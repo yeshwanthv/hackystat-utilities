@@ -49,13 +49,13 @@ If you wish to build the UriCache system from sources, you will need to install 
 For historical reasons, the constructor for the UriCache is called !NewUriCache.  To create an instance of a !UriCache, you can use either one of the two !UriCache constructors:
 
 {{{
-new UriCache(String cacheName, String subDir)
+new NewUriCache(String cacheName, String subDir)
 }}}
 
 or 
 
 {{{
-new UriCache(String cacheName, String subDir, Double maxLifeDays, Long capacity)
+new NewUriCache(String cacheName, String subDir, Double maxLifeDays, Long capacity)
 }}}
 
 These constructors indicate the two required and two optional properties available for !UriCaches:
