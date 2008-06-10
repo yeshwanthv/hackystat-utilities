@@ -17,10 +17,12 @@ cache will also be spooled to disk.
 
 Note that both keys and values for the cached items must be Serializable.
 
-!UriCache will expire items from the cache according to two algorithms:
+!UriCache will automatically expire items from the cache according to two algorithms:
 
   # If the user specifies an expiration time when adding an item, then the item will be removed after this expiration time is reached. By default, items expire 24 hours after being added. It is possible to specify an expiration time for the each item individually. 
-  # If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
+  # If the maximum cache capacity is reached, then items are removed (from memory) according to a least recently used algorithm. 
+
+Of course, it is also possible for a client to remove any instances manually, or even clear the cache entirely.
 
 The !UriCache uses a background optimizer which runs (approximately) every 60 seconds to delete items which are expired.
 
@@ -62,7 +64,7 @@ These constructors indicate the two required and two optional properties availab
 || cacheName || N/A || All !UriCaches must be passed a unique name, which will be used as the name for the disk cache file. || 
 || subDir || N/A || All !UriCaches will have an auxiliary cache disk file created in the directory ~/.hackystat/*subDir*/uricache/.  This directory is created if not present. ||
 || maxLifeDays || 1 || If a cache element is not retrieved within this number of days after being added, it is removed from the cache. ||
-|| capacity || 50000 || The default number of elements to hold in-memory before spooling them to disk. ||
+|| capacity || 50000 || The default number of elements to hold in-memory. All cached elements are always stored to disk.||
 
 == 4.2 Manipulating the cache ==
 
@@ -117,7 +119,7 @@ The !UriCache installs a shutdown hook which calls dispose() on all instantiated
 
 To avoid this problem, great care must be taken to write code such that classes providing cache behaviors (such as !DpdClient and !SensorBaseClient) are used in such a way that only one instance of these classes per user will exist.  
 
-Here, for example, is the authentication code from the DailyProjectData server, which uses a synchronized block to ensure that only one instance of a SensorBaseClient for a given user will be created, regardless of how many threads are running the Authenticator instance (or instances).
+Here, for example, is the authentication code from the !DailyProjectData server, which uses a synchronized block to ensure that only one instance of a !SensorBaseClient for a given user will be created, regardless of how many threads are running the Authenticator instance (or instances).
 
 {{{
  @Override protected boolean checkSecret(String identifier, char[] secretCharArray) {
