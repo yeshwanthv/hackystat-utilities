@@ -63,7 +63,7 @@ These constructors indicate the two required and two optional properties availab
 || subDir || N/A || All !UriCaches will have an auxiliary cache disk file created in the directory ~/.hackystat/*subDir*/uricache/.  This directory is created if not present. ||
 || maxLifeDays || 1 || If a cache element is not retrieved within this number of days after being added, it is removed from the cache. ||
 || capacity || 10000 || The maximum number of elements that the cache can hold. If this capacity is reached, then the addition of 
-new elements results in old elements being implicitly removed from the cache (according to a least recently used strategy).
+new elements results in old elements being implicitly removed from the cache (according to a least recently used strategy).||
 
 == 4.2 Manipulating the cache ==
 
