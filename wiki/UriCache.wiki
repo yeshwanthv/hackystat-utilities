@@ -20,15 +20,13 @@ Note that both keys and values for the cached items must be Serializable.
 !UriCache will automatically expire items from the cache according to two algorithms:
 
   # If the user specifies an expiration time when adding an item, then the item will be removed after this expiration time is reached. By default, items expire 24 hours after being added. It is possible to specify an expiration time for the each item individually. 
-  # If the maximum cache capacity is reached, then items are removed (from memory) according to a least recently used algorithm. 
+  # If the maximum cache capacity is reached, then items are removed according to a least recently used algorithm. 
 
 Of course, it is also possible for a client to remove any instances manually, or even clear the cache entirely.
 
-The !UriCache uses a background optimizer which runs (approximately) every 60 seconds to delete items which are expired.
-
 = 2.0 Downloading =
 
-The !UriCache package is distributed as part of the Hackystat Utilities package, which is incorporated by default into all Hackystat services.  Thus, in most cases you do not need to do anything extra to download or install the !UriCache; it is already prpresent in your system.
+The !UriCache package is distributed as part of the Hackystat Utilities package, which is incorporated by default into all Hackystat services.  Thus, in most cases you do not need to do anything extra to download or install the !UriCache; it is already present in your system.
 
 It is also possible to download the sources from the [http://code.google.com/p/hackystat-utilities/source Hackystat-Utilities SVN repository], but in that case you will need to build the library from sources. The distribution package comes with both sources and a pre-built libraries.
 
@@ -44,18 +42,18 @@ If you wish to build the UriCache system from sources, you will need to install 
 
 = 4.0 Usage =
 
-== 4.1. The !NewUriCache constructor == 
+== 4.1. The !UriCache constructor == 
 
-For historical reasons, the constructor for the UriCache is called !NewUriCache.  To create an instance of a !UriCache, you can use either one of the two !UriCache constructors:
+To create an instance of a !UriCache, you can use either one of the two !UriCache constructors:
 
 {{{
-new NewUriCache(String cacheName, String subDir)
+new UriCache(String cacheName, String subDir)
 }}}
 
 or 
 
 {{{
-new NewUriCache(String cacheName, String subDir, Double maxLifeDays, Long capacity)
+new UriCache(String cacheName, String subDir, Double maxLifeDays, Long capacity)
 }}}
 
 These constructors indicate the two required and two optional properties available for !UriCaches:
@@ -64,7 +62,8 @@ These constructors indicate the two required and two optional properties availab
 || cacheName || N/A || All !UriCaches must be passed a unique name, which will be used as the name for the disk cache file. || 
 || subDir || N/A || All !UriCaches will have an auxiliary cache disk file created in the directory ~/.hackystat/*subDir*/uricache/.  This directory is created if not present. ||
 || maxLifeDays || 1 || If a cache element is not retrieved within this number of days after being added, it is removed from the cache. ||
-|| capacity || 50000 || The default number of elements to hold in-memory. All cached elements are always stored to disk.||
+|| capacity || 10000 || The maximum number of elements that the cache can hold. If this capacity is reached, then the addition of 
+new elements results in old elements being implicitly removed from the cache (according to a least recently used strategy).
 
 == 4.2 Manipulating the cache ==
 
@@ -113,11 +112,21 @@ Note that we do not add entries to the cache for data from the current day.  Thi
 
 The !UriCache installs a shutdown hook which calls dispose() on all instantiated caches when the JVM exits.  This is intended to ensure that the disk cache gets closed correctly. 
 
-== 4.4 Concurrency issues ==
+== 4.4 Cache groups ==
+
+Within a given !UriCache, it is possible to create "groups", which are basically independent caches that share the same backing store but have their own "namespace".  The !UriCache provides a set of "group" methods: putInGroup(), getFromGroup(), removeFromGroup, getGroupKeys(), and getGroupSize(), which all take a group name as an argument.  
+
+There is no explicit group definition method; to create a group, simply use putInGroup and supply the group name you want to use. 
+
+Note that if you use putInGroup(), you must access that instance using getFromGroup(); the get() method will not retrieve it. 
+
+You typically want to use group-based access rather than the default access if you want to obtain the set of keys associated with a subset of cached instances and don't want to have to iterate over the entire cache.
+
+== 4.5 Concurrency issues ==
 
 !UriCache automatically provides a "write through" cache using JCS with a backing indexed disk cache.  There is a major bug/shortcoming of JCS in this respect, because if two threads access the same backing store concurrently, then erroneous results will occur: [https://issues.apache.org/jira/browse/JCS-31].  
 
-To avoid this problem, great care must be taken to write code such that classes providing cache behaviors (such as !DpdClient and !SensorBaseClient) are used in such a way that only one instance of these classes per user will exist.  
+To avoid this problem, care must be taken to ensure that two instances of a UriCache with the same cacheName and subdirectory are not running concurrently.  
 
 Here, for example, is the authentication code from the !DailyProjectData server, which uses a synchronized block to ensure that only one instance of a !SensorBaseClient for a given user will be created, regardless of how many threads are running the Authenticator instance (or instances).
 
@@ -161,13 +170,8 @@ Here, for example, is the authentication code from the !DailyProjectData server,
   }
 }}}
 
+Another possibility is if two identically configured instances of the same service are running on the same host at the same time. 
 
-
- 
- 
- 
- 
- 
  
  
  
