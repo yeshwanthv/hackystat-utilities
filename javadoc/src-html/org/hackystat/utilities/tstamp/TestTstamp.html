@@ -7,66 +7,131 @@
 <FONT color="green">004</FONT>    import static org.junit.Assert.assertFalse;<a name="line.4"></a>
 <FONT color="green">005</FONT>    import static org.junit.Assert.assertTrue;<a name="line.5"></a>
 <FONT color="green">006</FONT>    <a name="line.6"></a>
-<FONT color="green">007</FONT>    import javax.xml.datatype.XMLGregorianCalendar;<a name="line.7"></a>
-<FONT color="green">008</FONT>    <a name="line.8"></a>
-<FONT color="green">009</FONT>    import org.junit.Test;<a name="line.9"></a>
-<FONT color="green">010</FONT>    <a name="line.10"></a>
-<FONT color="green">011</FONT>    /**<a name="line.11"></a>
-<FONT color="green">012</FONT>     * Tests the Tstamp class. <a name="line.12"></a>
-<FONT color="green">013</FONT>     * @author Philip Johnson<a name="line.13"></a>
-<FONT color="green">014</FONT>     */<a name="line.14"></a>
-<FONT color="green">015</FONT>    public class TestTstamp {<a name="line.15"></a>
-<FONT color="green">016</FONT>      /**<a name="line.16"></a>
-<FONT color="green">017</FONT>       * Tests the Tstamp class.<a name="line.17"></a>
-<FONT color="green">018</FONT>       * @throws Exception if problems occur. <a name="line.18"></a>
-<FONT color="green">019</FONT>       */<a name="line.19"></a>
-<FONT color="green">020</FONT>      @Test public void testTstampArithmetic () throws Exception {<a name="line.20"></a>
-<FONT color="green">021</FONT>        XMLGregorianCalendar date1 = Tstamp.makeTimestamp("2007-08-01");<a name="line.21"></a>
-<FONT color="green">022</FONT>        XMLGregorianCalendar date2 = Tstamp.makeTimestamp("2007-08-02");<a name="line.22"></a>
-<FONT color="green">023</FONT>        XMLGregorianCalendar date3 = Tstamp.makeTimestamp("2007-08-03");<a name="line.23"></a>
-<FONT color="green">024</FONT>        assertTrue("Test equal", Tstamp.equal(date1, date1));<a name="line.24"></a>
-<FONT color="green">025</FONT>        assertTrue("Test increment days", Tstamp.equal(date2, Tstamp.incrementDays(date1, 1)));<a name="line.25"></a>
-<FONT color="green">026</FONT>        <a name="line.26"></a>
-<FONT color="green">027</FONT>        XMLGregorianCalendar date4 = Tstamp.makeTimestamp("2007-08-01T01:00:00");<a name="line.27"></a>
-<FONT color="green">028</FONT>        assertTrue("Test increment hours", Tstamp.equal(date4, Tstamp.incrementHours(date1, 1)));<a name="line.28"></a>
+<FONT color="green">007</FONT>    import java.util.ArrayList;<a name="line.7"></a>
+<FONT color="green">008</FONT>    import java.util.List;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import javax.xml.datatype.XMLGregorianCalendar;<a name="line.10"></a>
+<FONT color="green">011</FONT>    <a name="line.11"></a>
+<FONT color="green">012</FONT>    import org.junit.Test;<a name="line.12"></a>
+<FONT color="green">013</FONT>    <a name="line.13"></a>
+<FONT color="green">014</FONT>    /**<a name="line.14"></a>
+<FONT color="green">015</FONT>     * Tests the Tstamp class. <a name="line.15"></a>
+<FONT color="green">016</FONT>     * @author Philip Johnson<a name="line.16"></a>
+<FONT color="green">017</FONT>     */<a name="line.17"></a>
+<FONT color="green">018</FONT>    public class TestTstamp {<a name="line.18"></a>
+<FONT color="green">019</FONT>      /**<a name="line.19"></a>
+<FONT color="green">020</FONT>       * Tests the Tstamp class.<a name="line.20"></a>
+<FONT color="green">021</FONT>       * @throws Exception if problems occur. <a name="line.21"></a>
+<FONT color="green">022</FONT>       */<a name="line.22"></a>
+<FONT color="green">023</FONT>      @Test public void testTstampArithmetic () throws Exception {<a name="line.23"></a>
+<FONT color="green">024</FONT>        XMLGregorianCalendar date1 = Tstamp.makeTimestamp("2007-08-01");<a name="line.24"></a>
+<FONT color="green">025</FONT>        XMLGregorianCalendar date2 = Tstamp.makeTimestamp("2007-08-02");<a name="line.25"></a>
+<FONT color="green">026</FONT>        XMLGregorianCalendar date3 = Tstamp.makeTimestamp("2007-08-03");<a name="line.26"></a>
+<FONT color="green">027</FONT>        assertTrue("Test equal", Tstamp.equal(date1, date1));<a name="line.27"></a>
+<FONT color="green">028</FONT>        assertTrue("Test increment days", Tstamp.equal(date2, Tstamp.incrementDays(date1, 1)));<a name="line.28"></a>
 <FONT color="green">029</FONT>        <a name="line.29"></a>
-<FONT color="green">030</FONT>        XMLGregorianCalendar date5 = Tstamp.makeTimestamp("2007-08-01T00:01:00");<a name="line.30"></a>
-<FONT color="green">031</FONT>        assertTrue("Test increment mins", Tstamp.equal(date5, Tstamp.incrementMinutes(date1, 1)));<a name="line.31"></a>
+<FONT color="green">030</FONT>        XMLGregorianCalendar date4 = Tstamp.makeTimestamp("2007-08-01T01:00:00");<a name="line.30"></a>
+<FONT color="green">031</FONT>        assertTrue("Test increment hours", Tstamp.equal(date4, Tstamp.incrementHours(date1, 1)));<a name="line.31"></a>
 <FONT color="green">032</FONT>        <a name="line.32"></a>
-<FONT color="green">033</FONT>        XMLGregorianCalendar date6 = Tstamp.makeTimestamp("2007-08-01T00:00:01");<a name="line.33"></a>
-<FONT color="green">034</FONT>        assertTrue("Test increment secs", Tstamp.equal(date6, Tstamp.incrementSeconds(date1, 1)));<a name="line.34"></a>
-<FONT color="green">035</FONT>    <a name="line.35"></a>
-<FONT color="green">036</FONT>        assertTrue("Test greater than 1", Tstamp.greaterThan(date2, date1));<a name="line.36"></a>
-<FONT color="green">037</FONT>        assertFalse("Test greater than 2", Tstamp.greaterThan(date1, date2));<a name="line.37"></a>
-<FONT color="green">038</FONT>        assertFalse("Test greater than 3", Tstamp.greaterThan(date1, date1));<a name="line.38"></a>
-<FONT color="green">039</FONT>        <a name="line.39"></a>
-<FONT color="green">040</FONT>        assertTrue("Test less than 1", Tstamp.lessThan(date1, date2));<a name="line.40"></a>
-<FONT color="green">041</FONT>        assertFalse("Test less than 2", Tstamp.lessThan(date2, date1));<a name="line.41"></a>
-<FONT color="green">042</FONT>        assertFalse("Test less than 3", Tstamp.lessThan(date1, date1));   <a name="line.42"></a>
-<FONT color="green">043</FONT>        <a name="line.43"></a>
-<FONT color="green">044</FONT>        assertTrue("Test inbetween 1", Tstamp.inBetween(date1, date2, date3));<a name="line.44"></a>
-<FONT color="green">045</FONT>        assertTrue("Test inbetween 2", Tstamp.inBetween(date1, date1, date2));<a name="line.45"></a>
-<FONT color="green">046</FONT>        assertTrue("Test inbetween 3", Tstamp.inBetween(date1, date2, date2));    <a name="line.46"></a>
-<FONT color="green">047</FONT>        assertFalse("Test inbetween 4", Tstamp.inBetween(date1, date3, date2));   <a name="line.47"></a>
-<FONT color="green">048</FONT>        <a name="line.48"></a>
-<FONT color="green">049</FONT>        assertFalse("Test bogus time check", Tstamp.isBogusStartTime(date1));<a name="line.49"></a>
-<FONT color="green">050</FONT>      }<a name="line.50"></a>
-<FONT color="green">051</FONT>      <a name="line.51"></a>
-<FONT color="green">052</FONT>      /**<a name="line.52"></a>
-<FONT color="green">053</FONT>       * Tests time span. <a name="line.53"></a>
-<FONT color="green">054</FONT>       * <a name="line.54"></a>
-<FONT color="green">055</FONT>       * @throws Exception If problem occurs<a name="line.55"></a>
-<FONT color="green">056</FONT>       */<a name="line.56"></a>
-<FONT color="green">057</FONT>      @Test public void testTstampSpan() throws Exception {<a name="line.57"></a>
-<FONT color="green">058</FONT>        XMLGregorianCalendar date1 = Tstamp.makeTimestamp("2007-08-01T01:00:00.000");<a name="line.58"></a>
-<FONT color="green">059</FONT>        XMLGregorianCalendar date2 = Tstamp.makeTimestamp("2007-08-01T01:01:20.200");<a name="line.59"></a>
-<FONT color="green">060</FONT>        XMLGregorianCalendar date3 = Tstamp.makeTimestamp("2007-08-01T01:01:20.400");<a name="line.60"></a>
-<FONT color="green">061</FONT>        assertEquals("Test timespan 80200 ms", 80200, Tstamp.diff(date1, date2));<a name="line.61"></a>
-<FONT color="green">062</FONT>        assertEquals("Test timespan 200 ms", 200, Tstamp.diff(date2, date3));<a name="line.62"></a>
-<FONT color="green">063</FONT>      }<a name="line.63"></a>
-<FONT color="green">064</FONT>      <a name="line.64"></a>
-<FONT color="green">065</FONT>    <a name="line.65"></a>
-<FONT color="green">066</FONT>    }<a name="line.66"></a>
+<FONT color="green">033</FONT>        XMLGregorianCalendar date5 = Tstamp.makeTimestamp("2007-08-01T00:01:00");<a name="line.33"></a>
+<FONT color="green">034</FONT>        assertTrue("Test increment mins", Tstamp.equal(date5, Tstamp.incrementMinutes(date1, 1)));<a name="line.34"></a>
+<FONT color="green">035</FONT>        <a name="line.35"></a>
+<FONT color="green">036</FONT>        XMLGregorianCalendar date6 = Tstamp.makeTimestamp("2007-08-01T00:00:01");<a name="line.36"></a>
+<FONT color="green">037</FONT>        assertTrue("Test increment secs", Tstamp.equal(date6, Tstamp.incrementSeconds(date1, 1)));<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>        assertTrue("Test greater than 1", Tstamp.greaterThan(date2, date1));<a name="line.39"></a>
+<FONT color="green">040</FONT>        assertFalse("Test greater than 2", Tstamp.greaterThan(date1, date2));<a name="line.40"></a>
+<FONT color="green">041</FONT>        assertFalse("Test greater than 3", Tstamp.greaterThan(date1, date1));<a name="line.41"></a>
+<FONT color="green">042</FONT>        <a name="line.42"></a>
+<FONT color="green">043</FONT>        assertTrue("Test less than 1", Tstamp.lessThan(date1, date2));<a name="line.43"></a>
+<FONT color="green">044</FONT>        assertFalse("Test less than 2", Tstamp.lessThan(date2, date1));<a name="line.44"></a>
+<FONT color="green">045</FONT>        assertFalse("Test less than 3", Tstamp.lessThan(date1, date1));   <a name="line.45"></a>
+<FONT color="green">046</FONT>        <a name="line.46"></a>
+<FONT color="green">047</FONT>        assertTrue("Test inbetween 1", Tstamp.inBetween(date1, date2, date3));<a name="line.47"></a>
+<FONT color="green">048</FONT>        assertTrue("Test inbetween 2", Tstamp.inBetween(date1, date1, date2));<a name="line.48"></a>
+<FONT color="green">049</FONT>        assertTrue("Test inbetween 3", Tstamp.inBetween(date1, date2, date2));    <a name="line.49"></a>
+<FONT color="green">050</FONT>        assertFalse("Test inbetween 4", Tstamp.inBetween(date1, date3, date2));   <a name="line.50"></a>
+<FONT color="green">051</FONT>        <a name="line.51"></a>
+<FONT color="green">052</FONT>        assertFalse("Test bogus time check", Tstamp.isBogusStartTime(date1));<a name="line.52"></a>
+<FONT color="green">053</FONT>      }<a name="line.53"></a>
+<FONT color="green">054</FONT>      <a name="line.54"></a>
+<FONT color="green">055</FONT>      /**<a name="line.55"></a>
+<FONT color="green">056</FONT>       * Tests time span. <a name="line.56"></a>
+<FONT color="green">057</FONT>       * <a name="line.57"></a>
+<FONT color="green">058</FONT>       * @throws Exception If problem occurs<a name="line.58"></a>
+<FONT color="green">059</FONT>       */<a name="line.59"></a>
+<FONT color="green">060</FONT>      @Test public void testTstampSpan() throws Exception {<a name="line.60"></a>
+<FONT color="green">061</FONT>        XMLGregorianCalendar date1 = Tstamp.makeTimestamp("2007-08-01T01:00:00.000");<a name="line.61"></a>
+<FONT color="green">062</FONT>        XMLGregorianCalendar date2 = Tstamp.makeTimestamp("2007-08-01T01:01:20.200");<a name="line.62"></a>
+<FONT color="green">063</FONT>        XMLGregorianCalendar date3 = Tstamp.makeTimestamp("2007-08-01T01:01:20.400");<a name="line.63"></a>
+<FONT color="green">064</FONT>        assertEquals("Test timespan 80200 ms", 80200, Tstamp.diff(date1, date2));<a name="line.64"></a>
+<FONT color="green">065</FONT>        assertEquals("Test timespan 200 ms", 200, Tstamp.diff(date2, date3));<a name="line.65"></a>
+<FONT color="green">066</FONT>      }<a name="line.66"></a>
+<FONT color="green">067</FONT>      <a name="line.67"></a>
+<FONT color="green">068</FONT>      /**<a name="line.68"></a>
+<FONT color="green">069</FONT>       * Test to make sure that the is* methods work OK. <a name="line.69"></a>
+<FONT color="green">070</FONT>       * @throws Exception If problems occur. <a name="line.70"></a>
+<FONT color="green">071</FONT>       */<a name="line.71"></a>
+<FONT color="green">072</FONT>      @Test public void testOrLater() throws Exception {<a name="line.72"></a>
+<FONT color="green">073</FONT>        long millisInADay = 1000 * 60 * 60 * 24;<a name="line.73"></a>
+<FONT color="green">074</FONT>        XMLGregorianCalendar today = Tstamp.makeTimestamp();<a name="line.74"></a>
+<FONT color="green">075</FONT>        long todayInMillis = today.toGregorianCalendar().getTimeInMillis();<a name="line.75"></a>
+<FONT color="green">076</FONT>        long yesterdayInMillis = todayInMillis - millisInADay;<a name="line.76"></a>
+<FONT color="green">077</FONT>        XMLGregorianCalendar yesterday = Tstamp.makeTimestamp(yesterdayInMillis);<a name="line.77"></a>
+<FONT color="green">078</FONT>        long tomorrowInMillis = todayInMillis + millisInADay;<a name="line.78"></a>
+<FONT color="green">079</FONT>        XMLGregorianCalendar tomorrow = Tstamp.makeTimestamp(tomorrowInMillis);<a name="line.79"></a>
+<FONT color="green">080</FONT>        long lastWeekInMillis = todayInMillis - (millisInADay * 7);<a name="line.80"></a>
+<FONT color="green">081</FONT>        XMLGregorianCalendar lastWeek = Tstamp.makeTimestamp(lastWeekInMillis);<a name="line.81"></a>
+<FONT color="green">082</FONT>        assertTrue("Testing todayOrLater 1", Tstamp.isTodayOrLater(today));<a name="line.82"></a>
+<FONT color="green">083</FONT>        assertTrue("Testing todayOrLater 2", Tstamp.isTodayOrLater(tomorrow));<a name="line.83"></a>
+<FONT color="green">084</FONT>        assertFalse("Testing todayOrLater 3", Tstamp.isTodayOrLater(yesterday));<a name="line.84"></a>
+<FONT color="green">085</FONT>        assertTrue("Testing yesterdayOrLater 1", Tstamp.isYesterdayOrLater(today));<a name="line.85"></a>
+<FONT color="green">086</FONT>        assertTrue("Testing yesterdayOrLater 2", Tstamp.isYesterdayOrLater(tomorrow));<a name="line.86"></a>
+<FONT color="green">087</FONT>        assertTrue("Testing yesterdayOrLater 3", Tstamp.isYesterdayOrLater(yesterday));<a name="line.87"></a>
+<FONT color="green">088</FONT>        assertFalse("Testing yesterdayOrLater 4", Tstamp.isYesterdayOrLater(lastWeek));<a name="line.88"></a>
+<FONT color="green">089</FONT>      }<a name="line.89"></a>
+<FONT color="green">090</FONT>      <a name="line.90"></a>
+<FONT color="green">091</FONT>      /**<a name="line.91"></a>
+<FONT color="green">092</FONT>       * Test to make sure that the daysBetween method works correctly. <a name="line.92"></a>
+<FONT color="green">093</FONT>       * @throws Exception If problems occur. <a name="line.93"></a>
+<FONT color="green">094</FONT>       */<a name="line.94"></a>
+<FONT color="green">095</FONT>      @Test public void testDaysBetween() throws Exception {<a name="line.95"></a>
+<FONT color="green">096</FONT>        XMLGregorianCalendar today = Tstamp.makeTimestamp();<a name="line.96"></a>
+<FONT color="green">097</FONT>        assertEquals("Test daysBetween 1", 0, Tstamp.daysBetween(today, today));<a name="line.97"></a>
+<FONT color="green">098</FONT>        XMLGregorianCalendar tomorrow = Tstamp.incrementDays(today, 1);<a name="line.98"></a>
+<FONT color="green">099</FONT>        assertEquals("Test daysBetween 2", 1, Tstamp.daysBetween(today, tomorrow));<a name="line.99"></a>
+<FONT color="green">100</FONT>        XMLGregorianCalendar nextWeek = Tstamp.incrementDays(today, 7);<a name="line.100"></a>
+<FONT color="green">101</FONT>        assertEquals("Test daysBetween 3", 7, Tstamp.daysBetween(today, nextWeek));<a name="line.101"></a>
+<FONT color="green">102</FONT>        // Test a whole year, which might find DST issues.<a name="line.102"></a>
+<FONT color="green">103</FONT>        for (int i = 1; i &lt;= 365; i++) {<a name="line.103"></a>
+<FONT color="green">104</FONT>          XMLGregorianCalendar newDay = Tstamp.incrementDays(today, i);<a name="line.104"></a>
+<FONT color="green">105</FONT>          assertEquals("Test daysBetween 4", i, Tstamp.daysBetween(today, newDay));<a name="line.105"></a>
+<FONT color="green">106</FONT>        }<a name="line.106"></a>
+<FONT color="green">107</FONT>      }<a name="line.107"></a>
+<FONT color="green">108</FONT>    <a name="line.108"></a>
+<FONT color="green">109</FONT>      /**<a name="line.109"></a>
+<FONT color="green">110</FONT>       * Tests that the sort() method works. <a name="line.110"></a>
+<FONT color="green">111</FONT>       * @throws Exception If problems occur. <a name="line.111"></a>
+<FONT color="green">112</FONT>       */<a name="line.112"></a>
+<FONT color="green">113</FONT>      @Test public void testSorting() throws Exception {<a name="line.113"></a>
+<FONT color="green">114</FONT>        XMLGregorianCalendar tstamp1 = Tstamp.makeTimestamp();<a name="line.114"></a>
+<FONT color="green">115</FONT>        XMLGregorianCalendar tstamp2 = Tstamp.incrementSeconds(tstamp1, 1);<a name="line.115"></a>
+<FONT color="green">116</FONT>        XMLGregorianCalendar tstamp3 = Tstamp.incrementSeconds(tstamp1, 2);<a name="line.116"></a>
+<FONT color="green">117</FONT>        XMLGregorianCalendar tstamp4 = Tstamp.incrementSeconds(tstamp1, 3);<a name="line.117"></a>
+<FONT color="green">118</FONT>        List&lt;XMLGregorianCalendar&gt; tstamps = new ArrayList&lt;XMLGregorianCalendar&gt;();<a name="line.118"></a>
+<FONT color="green">119</FONT>        tstamps.add(tstamp2);<a name="line.119"></a>
+<FONT color="green">120</FONT>        tstamps.add(tstamp1);<a name="line.120"></a>
+<FONT color="green">121</FONT>        tstamps.add(tstamp4);<a name="line.121"></a>
+<FONT color="green">122</FONT>        tstamps.add(tstamp3);<a name="line.122"></a>
+<FONT color="green">123</FONT>        List&lt;XMLGregorianCalendar&gt; sortedList = Tstamp.sort(tstamps);<a name="line.123"></a>
+<FONT color="green">124</FONT>        assertEquals("Test sort1", tstamp1, sortedList.get(0));<a name="line.124"></a>
+<FONT color="green">125</FONT>        assertEquals("Test sort2", tstamp2, sortedList.get(1));<a name="line.125"></a>
+<FONT color="green">126</FONT>        assertEquals("Test sort3", tstamp3, sortedList.get(2));<a name="line.126"></a>
+<FONT color="green">127</FONT>        assertEquals("Test sort4", tstamp4, sortedList.get(3));<a name="line.127"></a>
+<FONT color="green">128</FONT>      }<a name="line.128"></a>
+<FONT color="green">129</FONT>      <a name="line.129"></a>
+<FONT color="green">130</FONT>    <a name="line.130"></a>
+<FONT color="green">131</FONT>    }<a name="line.131"></a>
 
 
 

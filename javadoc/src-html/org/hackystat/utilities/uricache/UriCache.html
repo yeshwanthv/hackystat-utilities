@@ -350,7 +350,7 @@
 <FONT color="green">347</FONT>      }<a name="line.347"></a>
 <FONT color="green">348</FONT>     <a name="line.348"></a>
 <FONT color="green">349</FONT>      /**<a name="line.349"></a>
-<FONT color="green">350</FONT>       * Removes everything in the default cache, but not any of the group caches.<a name="line.350"></a>
+<FONT color="green">350</FONT>       * Removes everything in the specified group.<a name="line.350"></a>
 <FONT color="green">351</FONT>       * @param group The group name.  <a name="line.351"></a>
 <FONT color="green">352</FONT>       */<a name="line.352"></a>
 <FONT color="green">353</FONT>      public void clearGroup(String group) {<a name="line.353"></a>
@@ -439,18 +439,21 @@
 <FONT color="green">436</FONT>       */<a name="line.436"></a>
 <FONT color="green">437</FONT>      private String getCachePath(String cacheSubDir) {<a name="line.437"></a>
 <FONT color="green">438</FONT>        File path = new File(HackystatUserHome.getHome(), ".hackystat/" + cacheSubDir + "/uricache");<a name="line.438"></a>
-<FONT color="green">439</FONT>        path.mkdirs();<a name="line.439"></a>
-<FONT color="green">440</FONT>        return path.getAbsolutePath();<a name="line.440"></a>
-<FONT color="green">441</FONT>      }<a name="line.441"></a>
-<FONT color="green">442</FONT>      <a name="line.442"></a>
-<FONT color="green">443</FONT>      /**<a name="line.443"></a>
-<FONT color="green">444</FONT>       * Sets the logging level for this logger to level.<a name="line.444"></a>
-<FONT color="green">445</FONT>       * @param level A string indicating the level, such as "FINE", "INFO", "ALL", etc.<a name="line.445"></a>
-<FONT color="green">446</FONT>       */<a name="line.446"></a>
-<FONT color="green">447</FONT>      public void setLoggingLevel(String level) {<a name="line.447"></a>
-<FONT color="green">448</FONT>        HackystatLogger.setLoggingLevel(this.logger, level);<a name="line.448"></a>
-<FONT color="green">449</FONT>      }<a name="line.449"></a>
-<FONT color="green">450</FONT>    }<a name="line.450"></a>
+<FONT color="green">439</FONT>        boolean dirsOk = path.mkdirs();<a name="line.439"></a>
+<FONT color="green">440</FONT>        if (!dirsOk &amp;&amp; !path.exists()) {<a name="line.440"></a>
+<FONT color="green">441</FONT>          throw new RuntimeException("mkdirs() failed");<a name="line.441"></a>
+<FONT color="green">442</FONT>        }<a name="line.442"></a>
+<FONT color="green">443</FONT>        return path.getAbsolutePath();<a name="line.443"></a>
+<FONT color="green">444</FONT>      }<a name="line.444"></a>
+<FONT color="green">445</FONT>      <a name="line.445"></a>
+<FONT color="green">446</FONT>      /**<a name="line.446"></a>
+<FONT color="green">447</FONT>       * Sets the logging level for this logger to level.<a name="line.447"></a>
+<FONT color="green">448</FONT>       * @param level A string indicating the level, such as "FINE", "INFO", "ALL", etc.<a name="line.448"></a>
+<FONT color="green">449</FONT>       */<a name="line.449"></a>
+<FONT color="green">450</FONT>      public void setLoggingLevel(String level) {<a name="line.450"></a>
+<FONT color="green">451</FONT>        HackystatLogger.setLoggingLevel(this.logger, level);<a name="line.451"></a>
+<FONT color="green">452</FONT>      }<a name="line.452"></a>
+<FONT color="green">453</FONT>    }<a name="line.453"></a>
 
 
 

@@ -75,90 +75,97 @@
 <FONT color="green">072</FONT>        UriCache cache = new UriCache("GroupedKeyCache", testSubDir, 1D, 1000L);<a name="line.72"></a>
 <FONT color="green">073</FONT>        cache.clear();<a name="line.73"></a>
 <FONT color="green">074</FONT>        String group1 = "group1";<a name="line.74"></a>
-<FONT color="green">075</FONT>        cache.putInGroup("one", group1, "1");<a name="line.75"></a>
-<FONT color="green">076</FONT>        cache.putInGroup("two", group1, "2");<a name="line.76"></a>
-<FONT color="green">077</FONT>        cache.putInGroup("three", "group2", "3");<a name="line.77"></a>
-<FONT color="green">078</FONT>        assertEquals("Test simple group retrieval1", "1", cache.getFromGroup("one", group1));<a name="line.78"></a>
-<FONT color="green">079</FONT>        assertEquals("Test simple group retrieval2", "2", cache.getFromGroup("two", group1));<a name="line.79"></a>
-<FONT color="green">080</FONT>        assertEquals("Test simple group retrieval3", "3", cache.getFromGroup("three", "group2"));<a name="line.80"></a>
-<FONT color="green">081</FONT>        assertNull("Test non-group retrieval won't get the element", cache.get("one"));<a name="line.81"></a>
-<FONT color="green">082</FONT>        assertEquals("Test group1 keyset", 2, cache.getGroupKeys(group1).size());<a name="line.82"></a>
-<FONT color="green">083</FONT>        assertEquals("Test group2 keyset", 1, cache.getGroupKeys("group2").size());<a name="line.83"></a>
-<FONT color="green">084</FONT>        cache.removeFromGroup("one", group1);<a name="line.84"></a>
-<FONT color="green">085</FONT>        assertEquals("Test new group1 keyset", 1, cache.getGroupKeys(group1).size());<a name="line.85"></a>
-<FONT color="green">086</FONT>        assertTrue("Test group1 keyset element", cache.getGroupKeys(group1).contains("two"));<a name="line.86"></a>
-<FONT color="green">087</FONT>      }<a name="line.87"></a>
-<FONT color="green">088</FONT>      <a name="line.88"></a>
-<FONT color="green">089</FONT>     <a name="line.89"></a>
-<FONT color="green">090</FONT>      /**<a name="line.90"></a>
-<FONT color="green">091</FONT>       * Test simple cache put and get.<a name="line.91"></a>
-<FONT color="green">092</FONT>       */<a name="line.92"></a>
-<FONT color="green">093</FONT>      @Test<a name="line.93"></a>
-<FONT color="green">094</FONT>      public void testDisposeCache() {<a name="line.94"></a>
-<FONT color="green">095</FONT>        // Create a cache<a name="line.95"></a>
-<FONT color="green">096</FONT>        String key = "key";<a name="line.96"></a>
-<FONT color="green">097</FONT>        String value = "value";<a name="line.97"></a>
-<FONT color="green">098</FONT>        String cacheName = "TestDisposeCache";<a name="line.98"></a>
-<FONT color="green">099</FONT>        UriCache cache = new UriCache(cacheName, testSubDir);<a name="line.99"></a>
-<FONT color="green">100</FONT>        cache.put(key, value);<a name="line.100"></a>
-<FONT color="green">101</FONT>        assertEquals("Checking simple get", value, cache.get(key));<a name="line.101"></a>
-<FONT color="green">102</FONT>        // now dispose and try again.<a name="line.102"></a>
-<FONT color="green">103</FONT>        UriCache.dispose(cacheName);<a name="line.103"></a>
-<FONT color="green">104</FONT>        cache = new UriCache(cacheName, testSubDir);<a name="line.104"></a>
-<FONT color="green">105</FONT>        cache.put(key, value);<a name="line.105"></a>
-<FONT color="green">106</FONT>        assertEquals("Checking simple get 2", value, cache.get(key));<a name="line.106"></a>
-<FONT color="green">107</FONT>      }<a name="line.107"></a>
-<FONT color="green">108</FONT>    <a name="line.108"></a>
-<FONT color="green">109</FONT>      /**<a name="line.109"></a>
-<FONT color="green">110</FONT>       * Test use of disk cache.<a name="line.110"></a>
-<FONT color="green">111</FONT>       */<a name="line.111"></a>
-<FONT color="green">112</FONT>      @Test<a name="line.112"></a>
-<FONT color="green">113</FONT>      public void testDiskCache() {<a name="line.113"></a>
-<FONT color="green">114</FONT>        // Create a cache<a name="line.114"></a>
-<FONT color="green">115</FONT>        Double maxLifeDays = 1D;<a name="line.115"></a>
-<FONT color="green">116</FONT>        Long capacity = 100L;<a name="line.116"></a>
-<FONT color="green">117</FONT>        UriCache cache = new UriCache("TestDiskCache", testSubDir, maxLifeDays, capacity);<a name="line.117"></a>
-<FONT color="green">118</FONT>        // Now do a loop and put more than 100 items in it.<a name="line.118"></a>
-<FONT color="green">119</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.119"></a>
-<FONT color="green">120</FONT>          cache.put(i, i);<a name="line.120"></a>
-<FONT color="green">121</FONT>        }<a name="line.121"></a>
-<FONT color="green">122</FONT>        // Now check to see that we can retrieve all 200 items.<a name="line.122"></a>
-<FONT color="green">123</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.123"></a>
-<FONT color="green">124</FONT>          assertEquals("Checking retrieval", i, cache.get(i));<a name="line.124"></a>
-<FONT color="green">125</FONT>        }<a name="line.125"></a>
-<FONT color="green">126</FONT>      }<a name="line.126"></a>
-<FONT color="green">127</FONT>      <a name="line.127"></a>
-<FONT color="green">128</FONT>      /**<a name="line.128"></a>
-<FONT color="green">129</FONT>       * Test that we can expire elements from the cache. <a name="line.129"></a>
-<FONT color="green">130</FONT>       * This test no longer works because we've changed the <a name="line.130"></a>
-<FONT color="green">131</FONT>       * @throws Exception If problems occur.<a name="line.131"></a>
-<FONT color="green">132</FONT>       */<a name="line.132"></a>
-<FONT color="green">133</FONT>      @Test<a name="line.133"></a>
-<FONT color="green">134</FONT>      public void testElementExpiration() throws Exception {<a name="line.134"></a>
-<FONT color="green">135</FONT>        // Create a cache with maxLife of 1 second and a maximum of 100 in-memory elements.<a name="line.135"></a>
-<FONT color="green">136</FONT>        Double maxLifeDays = 1.157e-5D;<a name="line.136"></a>
-<FONT color="green">137</FONT>        Long capacity = 100L;<a name="line.137"></a>
-<FONT color="green">138</FONT>        UriCache cache = new UriCache("TestExpiration", testSubDir, maxLifeDays, capacity);<a name="line.138"></a>
-<FONT color="green">139</FONT>        // Now do a loop and put 200 items in it.<a name="line.139"></a>
-<FONT color="green">140</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.140"></a>
-<FONT color="green">141</FONT>          cache.put(i, i);<a name="line.141"></a>
-<FONT color="green">142</FONT>        }<a name="line.142"></a>
-<FONT color="green">143</FONT>        // Add an element that expires in 3 seconds. <a name="line.143"></a>
-<FONT color="green">144</FONT>        cache.put(300, 300, 8.4e-4D);<a name="line.144"></a>
-<FONT color="green">145</FONT>        // Now wait for two seconds.<a name="line.145"></a>
-<FONT color="green">146</FONT>        Thread.sleep(2000);<a name="line.146"></a>
-<FONT color="green">147</FONT>        // Now check to see that all of the items with the default maxLife are gone.<a name="line.147"></a>
-<FONT color="green">148</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.148"></a>
-<FONT color="green">149</FONT>          assertNull("Checking retrieval", cache.get(i));<a name="line.149"></a>
-<FONT color="green">150</FONT>        }<a name="line.150"></a>
-<FONT color="green">151</FONT>        // And check that our item with the custom maxLife time is still there.<a name="line.151"></a>
-<FONT color="green">152</FONT>        assertEquals("Check non-expired element", 300, cache.get(300));<a name="line.152"></a>
-<FONT color="green">153</FONT>        // Now wait one more second, enough time for our custom maxLife time to be exceeded.<a name="line.153"></a>
-<FONT color="green">154</FONT>        Thread.sleep(1001);<a name="line.154"></a>
-<FONT color="green">155</FONT>        // Now see that our element with the custom maxLife time is now gone.<a name="line.155"></a>
-<FONT color="green">156</FONT>        assertNull("Check expired element", cache.get(300));<a name="line.156"></a>
-<FONT color="green">157</FONT>      }<a name="line.157"></a>
-<FONT color="green">158</FONT>    }<a name="line.158"></a>
+<FONT color="green">075</FONT>        String group2 = "group2";<a name="line.75"></a>
+<FONT color="green">076</FONT>        String one = "one";<a name="line.76"></a>
+<FONT color="green">077</FONT>        String two = "two";<a name="line.77"></a>
+<FONT color="green">078</FONT>        String three = "three";<a name="line.78"></a>
+<FONT color="green">079</FONT>        cache.putInGroup(one, group1, "1");<a name="line.79"></a>
+<FONT color="green">080</FONT>        cache.putInGroup(two, group1, "2");<a name="line.80"></a>
+<FONT color="green">081</FONT>        cache.putInGroup(three, "group2", "3");<a name="line.81"></a>
+<FONT color="green">082</FONT>        assertEquals("Test simple group retrieval1", "1", cache.getFromGroup(one, group1));<a name="line.82"></a>
+<FONT color="green">083</FONT>        assertEquals("Test simple group retrieval2", "2", cache.getFromGroup(two, group1));<a name="line.83"></a>
+<FONT color="green">084</FONT>        assertEquals("Test simple group retrieval3", "3", cache.getFromGroup(three, "group2"));<a name="line.84"></a>
+<FONT color="green">085</FONT>        assertNull("Test non-group retrieval won't get the element", cache.get(one));<a name="line.85"></a>
+<FONT color="green">086</FONT>        assertEquals("Test group1 keyset", 2, cache.getGroupKeys(group1).size());<a name="line.86"></a>
+<FONT color="green">087</FONT>        assertEquals("Test group2 keyset", 1, cache.getGroupKeys(group2).size());<a name="line.87"></a>
+<FONT color="green">088</FONT>        cache.removeFromGroup(one, group1);<a name="line.88"></a>
+<FONT color="green">089</FONT>        assertEquals("Test new group1 keyset", 1, cache.getGroupKeys(group1).size());<a name="line.89"></a>
+<FONT color="green">090</FONT>        assertTrue("Test group1 keyset element", cache.getGroupKeys(group1).contains(two));<a name="line.90"></a>
+<FONT color="green">091</FONT>        cache.clearGroup(group1);<a name="line.91"></a>
+<FONT color="green">092</FONT>        assertEquals("Test clearGroup", 0, cache.getGroupKeys(group1).size());<a name="line.92"></a>
+<FONT color="green">093</FONT>        assertNull("Test clearGroup 2", cache.getFromGroup(one, group1));<a name="line.93"></a>
+<FONT color="green">094</FONT>      }<a name="line.94"></a>
+<FONT color="green">095</FONT>      <a name="line.95"></a>
+<FONT color="green">096</FONT>     <a name="line.96"></a>
+<FONT color="green">097</FONT>      /**<a name="line.97"></a>
+<FONT color="green">098</FONT>       * Test simple cache put and get.<a name="line.98"></a>
+<FONT color="green">099</FONT>       */<a name="line.99"></a>
+<FONT color="green">100</FONT>      @Test<a name="line.100"></a>
+<FONT color="green">101</FONT>      public void testDisposeCache() {<a name="line.101"></a>
+<FONT color="green">102</FONT>        // Create a cache<a name="line.102"></a>
+<FONT color="green">103</FONT>        String key = "key";<a name="line.103"></a>
+<FONT color="green">104</FONT>        String value = "value";<a name="line.104"></a>
+<FONT color="green">105</FONT>        String cacheName = "TestDisposeCache";<a name="line.105"></a>
+<FONT color="green">106</FONT>        UriCache cache = new UriCache(cacheName, testSubDir);<a name="line.106"></a>
+<FONT color="green">107</FONT>        cache.put(key, value);<a name="line.107"></a>
+<FONT color="green">108</FONT>        assertEquals("Checking simple get", value, cache.get(key));<a name="line.108"></a>
+<FONT color="green">109</FONT>        // now dispose and try again.<a name="line.109"></a>
+<FONT color="green">110</FONT>        UriCache.dispose(cacheName);<a name="line.110"></a>
+<FONT color="green">111</FONT>        cache = new UriCache(cacheName, testSubDir);<a name="line.111"></a>
+<FONT color="green">112</FONT>        cache.put(key, value);<a name="line.112"></a>
+<FONT color="green">113</FONT>        assertEquals("Checking simple get 2", value, cache.get(key));<a name="line.113"></a>
+<FONT color="green">114</FONT>      }<a name="line.114"></a>
+<FONT color="green">115</FONT>    <a name="line.115"></a>
+<FONT color="green">116</FONT>      /**<a name="line.116"></a>
+<FONT color="green">117</FONT>       * Test use of disk cache.<a name="line.117"></a>
+<FONT color="green">118</FONT>       */<a name="line.118"></a>
+<FONT color="green">119</FONT>      @Test<a name="line.119"></a>
+<FONT color="green">120</FONT>      public void testDiskCache() {<a name="line.120"></a>
+<FONT color="green">121</FONT>        // Create a cache<a name="line.121"></a>
+<FONT color="green">122</FONT>        Double maxLifeDays = 1D;<a name="line.122"></a>
+<FONT color="green">123</FONT>        Long capacity = 100L;<a name="line.123"></a>
+<FONT color="green">124</FONT>        UriCache cache = new UriCache("TestDiskCache", testSubDir, maxLifeDays, capacity);<a name="line.124"></a>
+<FONT color="green">125</FONT>        // Now do a loop and put more than 100 items in it.<a name="line.125"></a>
+<FONT color="green">126</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.126"></a>
+<FONT color="green">127</FONT>          cache.put(i, i);<a name="line.127"></a>
+<FONT color="green">128</FONT>        }<a name="line.128"></a>
+<FONT color="green">129</FONT>        // Now check to see that we can retrieve all 200 items.<a name="line.129"></a>
+<FONT color="green">130</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.130"></a>
+<FONT color="green">131</FONT>          assertEquals("Checking retrieval", i, cache.get(i));<a name="line.131"></a>
+<FONT color="green">132</FONT>        }<a name="line.132"></a>
+<FONT color="green">133</FONT>      }<a name="line.133"></a>
+<FONT color="green">134</FONT>      <a name="line.134"></a>
+<FONT color="green">135</FONT>      /**<a name="line.135"></a>
+<FONT color="green">136</FONT>       * Test that we can expire elements from the cache. <a name="line.136"></a>
+<FONT color="green">137</FONT>       * This test no longer works because we've changed the <a name="line.137"></a>
+<FONT color="green">138</FONT>       * @throws Exception If problems occur.<a name="line.138"></a>
+<FONT color="green">139</FONT>       */<a name="line.139"></a>
+<FONT color="green">140</FONT>      @Test<a name="line.140"></a>
+<FONT color="green">141</FONT>      public void testElementExpiration() throws Exception {<a name="line.141"></a>
+<FONT color="green">142</FONT>        // Create a cache with maxLife of 1 second and a maximum of 100 in-memory elements.<a name="line.142"></a>
+<FONT color="green">143</FONT>        Double maxLifeDays = 1.157e-5D;<a name="line.143"></a>
+<FONT color="green">144</FONT>        Long capacity = 100L;<a name="line.144"></a>
+<FONT color="green">145</FONT>        UriCache cache = new UriCache("TestExpiration", testSubDir, maxLifeDays, capacity);<a name="line.145"></a>
+<FONT color="green">146</FONT>        // Now do a loop and put 200 items in it.<a name="line.146"></a>
+<FONT color="green">147</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.147"></a>
+<FONT color="green">148</FONT>          cache.put(i, i);<a name="line.148"></a>
+<FONT color="green">149</FONT>        }<a name="line.149"></a>
+<FONT color="green">150</FONT>        // Add an element that expires in 3 seconds. <a name="line.150"></a>
+<FONT color="green">151</FONT>        cache.put(300, 300, 8.4e-4D);<a name="line.151"></a>
+<FONT color="green">152</FONT>        // Now wait for two seconds.<a name="line.152"></a>
+<FONT color="green">153</FONT>        Thread.sleep(2000);<a name="line.153"></a>
+<FONT color="green">154</FONT>        // Now check to see that all of the items with the default maxLife are gone.<a name="line.154"></a>
+<FONT color="green">155</FONT>        for (int i = 1; i &lt; 200; i++) {<a name="line.155"></a>
+<FONT color="green">156</FONT>          assertNull("Checking retrieval", cache.get(i));<a name="line.156"></a>
+<FONT color="green">157</FONT>        }<a name="line.157"></a>
+<FONT color="green">158</FONT>        // And check that our item with the custom maxLife time is still there.<a name="line.158"></a>
+<FONT color="green">159</FONT>        assertEquals("Check non-expired element", 300, cache.get(300));<a name="line.159"></a>
+<FONT color="green">160</FONT>        // Now wait one more second, enough time for our custom maxLife time to be exceeded.<a name="line.160"></a>
+<FONT color="green">161</FONT>        Thread.sleep(1001);<a name="line.161"></a>
+<FONT color="green">162</FONT>        // Now see that our element with the custom maxLife time is now gone.<a name="line.162"></a>
+<FONT color="green">163</FONT>        assertNull("Check expired element", cache.get(300));<a name="line.163"></a>
+<FONT color="green">164</FONT>      }<a name="line.164"></a>
+<FONT color="green">165</FONT>    }<a name="line.165"></a>
 
 
 
