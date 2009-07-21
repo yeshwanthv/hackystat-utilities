@@ -25,7 +25,7 @@ org.hackystat/
 
 Since the Hackystat build system always references the "latest.integration", all but the most recent published set of files are extraneous.  Furthermore, an active development process can easily generate hundreds of thousands of these outdated publications in a relatively short period of time. For example, I recently had 1400 files in my local-repository directory, occupying 330MB of disk space. 
 
-To simply the maintenance of this directory, the hackystat-utilities package contains a class called !CleanLocalRepository with an associated Ant task. This class will delete all publications directories from each Hackystat module except for the most recent one.  There is an associated Ant target called "cleanlocalrepository" which invokes this class.  
+To simply the maintenance of this directory, the hackystat-utilities package contains a class called !CleanLocalRepository. This class will delete all publications directories from each Hackystat module except for the most recent one.  There is an associated Ant target in build.xml called "cleanlocalrepository" that invokes this class.  
 
 Thus, to garbage collect the local repository, you can cd to the hackystat-utilities directory and run "ant cleanlocaldirectory".  The class prints out messages as it runs about the files it is deleting. If there is only one published version of a module, it will not delete it. 
 
