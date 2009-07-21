@@ -1,4 +1,5 @@
 #summary Overview of the utility for cleaning up the Ivy local hackystat repository.
+#labels Featured
 
 = Introduction =
 
@@ -24,7 +25,7 @@ org.hackystat/
 
 Since the Hackystat build system always references the "latest.integration", all but the most recent published set of files are extraneous.  Furthermore, an active development process can easily generate hundreds of thousands of these outdated publications in a relatively short period of time. For example, I recently had 1400 files in my local-repository directory, occupying 330MB of disk space. 
 
-To simply the maintenance of this directory, the hackystat-utilities package contains a class called CleanLocalRepository with an associated Ant task. This class will delete all publications directories from each Hackystat module except for the most recent one.  There is an associated Ant target called "cleanlocalrepository" which invokes this class.  
+To simply the maintenance of this directory, the hackystat-utilities package contains a class called !CleanLocalRepository with an associated Ant task. This class will delete all publications directories from each Hackystat module except for the most recent one.  There is an associated Ant target called "cleanlocalrepository" which invokes this class.  
 
 Thus, to garbage collect the local repository, you can cd to the hackystat-utilities directory and run "ant cleanlocaldirectory".  The class prints out messages as it runs about the files it is deleting. If there is only one published version of a module, it will not delete it. 
 
@@ -85,8 +86,6 @@ No ivy:settings found for the default reference 'ivy.instance'.  A default insta
 compile:
 
 cleanlocalrepository:
-     [echo] build/classes is: C:\hackystat-projects\hackystat-utilities\build/classes
-
      [java] Processing repository: C:\Documents and Settings\johnson\.ivy2\local-repository\org.hackystat
      [java] Processing module: C:\Documents and Settings\johnson\.ivy2\local-repository\org.hackystat\hackystat-analysis-dailyprojectdata
      [java]   No old publications to delete.
@@ -120,4 +119,5 @@ Sending build result to Hackystat server...
 
 }}}
 
+After cleaning, the local-repository contains about 170 files and occupies about 50MB of disk space. 
         
